@@ -1,0 +1,167 @@
+<div class="row">
+    <div class="col-3" style="padding: 0;">
+            <div class="sidebar" style = "border: none;">
+            <div class="box_logo d-flex align-items-center">
+                <div class="logo col-3">
+                    <i class="far fa-user"
+                        style="padding: 0 1em; scale: 9%; margin-bottom: 45px; margin-left: 20px;"></i>
+                </div>
+                <div class="admin col-8">
+                    <ul>
+                        <li class="d-flex align-items-center">
+                            <span style="font-size: 24px; font-weight: 500;">ADMIN</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li>
+                        <i class="fas fa-columns"></i>
+                        <a href="/admin">DASHBOARD</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-warehouse"></i>
+                        <a href="/Warehouse">WAREHOUSE</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <a href="/admin/warehouse/addProduct">ADD PRODUCTS</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-store"></i>
+                        <a href="/Order">ORDERS</a>
+                    </li>
+                      <li>
+                        <i class="fas fa-user"></i>
+                        <a href="/users">Users</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comments"></i>
+                        <a href="/feedback">Feedbacks</a>
+                    </li>
+                     <li style="background-color: #ffb9a4;">
+                        <i class="fas fa-comment-dots"></i>
+                        <a href="/chat/chatbox/list">CHAT</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <a href="/account/logout">LOGOUT</a>
+                    </li>
+                </ul>
+        </div>
+        </div>
+    </div>
+    <div class="col-9" style="padding: 0;">
+        <div class="content">
+            <div class="title">
+                <span style="margin-left: 45px;">CHAT</span>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="UserChatList col-3">
+                    <ul>
+                        {{#each data.conversation.c_name}}
+                        <li class="UserChat d-flex jusify-content-center">
+                            <img src="https://robohash.org/nihilplaceateos.png?size=50x50&set=set1" alt="">
+                            <div class="ChatContent">
+                                <p class="UserNameChat latestTest">{{username}}</p>
+                                <span class="latestTest">{{lastMessage}}</span>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+                <div class="BoxChat col-8">
+                    <div class="UserChatting d-flex align-items-center">
+                        <img src="https://robohash.org/nihilplaceateos.png?size=50x50&set=set1" alt="">
+                        {{#each uniChat}}
+                        <p class="ChatContent UserNameChat latestTest">{{username}}</p>
+                        {{/each}}
+                    </div>
+                    <div id="Chatting">
+                        <div id="box-message">
+                            {{#each uniChat}}
+                            {{#each contents}}
+                            {{#if isAdmin}}
+                            <p class="Mess AdminText">{{msg}}</p>
+                            {{else}}
+                            <p class="Mess CustomerText">{{msg}}</p>
+                            {{/if}}
+                            {{/each}}
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div class="TypeMess row" style="margin-top: 50px;">
+                        <div class="col-1">
+
+                            <button type="button" class="btn btn-outline-0" style="margin-right: 10px;"><i
+                                    class="far fa-file"></i></button>
+                        </div>
+                        <div class="col-11">
+
+                            <form>
+                                <div class="row">
+                                    <div class="col-11">
+
+                                        <input id="message" type="text"
+                                            class="border border-dark rounded-end rounded-start rounded-pill form-control"
+                                            placeholder="Type a message" aria-describedby="button-addon2">
+                                        <input type="hidden" id="username" value={{_id}}>
+                                    </div>
+                                    <div class="col-1">
+                                        <button class="btn btn-outline-0" type="submit" id="button-addon2"><i
+                                                class="far fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(function () {
+            var socket = io();
+            $('form').submit(function () {
+                socket.emit('chat message', $('#message').val(), '2');
+                $('#message').val('');
+                return false;
+            });
+            socket.on('chat message', function (msg, flag, username) {
+                if (flag == '1') {
+                    $('#username').val(`${username}`)
+                    let b = document.getElementById("Chatting").innerHTML;
+                    b += `<p class="Mess CustomerText">` + msg + `</p>`
+                    document.getElementById("Chatting").innerHTML = b;
+                } else {
+                    let b = document.getElementById("Chatting").innerHTML;
+                    b += `<p class="Mess AdminText">` + msg + `</p>`
+                    document.getElementById("Chatting").innerHTML = b;
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#button-addon2').click(function (e) {
+                var username = $('#username').val()
+                var msg = $('#message').val();
+                $.ajax({
+                    method: 'post',
+                    url: '/chat/admin-chat',
+                    data: {
+                        username: username,
+                        msg: msg,
+                        isAdmin: true
+                    }
+                });
+            })
+            $('.UserChat').click(function (e) {
+                let url = $(this).children().siblings().children('.UserNameChat');
+                const id = url.text();
+                window.location = `http://localhost:3000/chat/chatbox/${id}`
+            })
+        })
+    </script>

@@ -1,0 +1,251 @@
+<div class="container-fluid p-0">
+    {{!-- navbar --}}
+    <div class="row nav-bar d-flex align-items-center">
+        <!-- <div class="col-1"></div> -->
+        <div class="col-1 offset-1">
+            <span>Product</span>
+        </div>
+        <div class="col-2 offset-3 p-0">
+            <span>unit price</span>
+        </div>
+        <div class="col-1 me-4 p-0">
+            <span>quantity</span>
+        </div>
+        <div class="col-2 text-center me-4">
+            <span>total price</span>
+        </div>
+        <div class="col-1 m-0">
+            <span>actions</span>
+        </div>
+    </div>
+
+    <!-- content -->
+    <div class="itemContainer">
+        <!-- 1 -->
+        {{#each prds}}
+        <div class="row d-flex align-items-center pb-2 mb-2" style="background-color: #F4F1F1;">
+            <div class="col-1 ps-5 ms-3 form-check" id="flexCheckDefault">
+                <input class="form-check-input border-black FCI _{{@index}}" type="checkbox" value="" onclick="checkTicked({{@index}})">
+            </div>
+            <!-- product -->
+            <div id="img" class="col-1">
+            <a href="/book/{{ProductID}}" style="display:inline">
+                <img src={{Photo}} alt="{{ProductName}}" class="mt-1 _{{@index}}" style="width: 7rem; height: 10rem;">
+            </a>
+            </div>
+            <div class="col-2 ms-5">
+                <div id="ProductName"><a href="/book/{{ProductID}}"><span class="text-uppercase fw-bold greenTitle ls-wide _{{@index}}" >{{ProductName}}</span></a></div>
+                <br>
+                {{#each (generateArr Rating)}}
+                    <i class="fas fa-star star"></i>
+                {{/each}}
+                {{#each (generateArr (sub 5 Rating)) }}
+                    <i class="far fa-star star"></i>
+                {{/each}}
+                <p class="mb-0" id="Category">Category: <span class="_{{@index}}">{{Cate}}</span></p>
+                <p class="mt-0" id="ProductID">ProductID: <span class="_{{@index}}">{{ProductID}}</span></p>
+            </div>
+            <!-- unit price -->
+            <div class="col-2 ms-2 text-center">
+                <p class="fw-bold fs-5 mt-3" id="PriceOut">
+                    <span class="_{{@index}}">{{PriceOut}}</span> VNĐ</p>
+            </div>
+            <!-- quantity -->
+            <div class="col-2 ps-5 mt-5">
+                <div>
+                    <button type="button" id="item1-sub" onclick="sub({{@index}})" class="btn border-dark" style="background-color: #D9D9D9;"><span
+                        class="fw-bold">-</span></button>
+                    <button type="button" id="item1-quant" class="btn border-dark w-25"
+                        style="background-color: #D9D9D9;"><span class="small _{{@index}}">{{CartQuantity}}</span></button>
+                    <button type="button" id="item1-plus" onclick="plus({{@index}})" class="btn border-dark" style="background-color: #D9D9D9;"><span
+                            class="fw-bold">+</span></button>
+                </div>
+                <div style="font-size: 1em; margin-top: 10px;" id="Instock">
+                    <span>In stock: </span>
+                    <span class="_{{@index}}">{{Instock}}</span>
+                </div>
+            </div>
+            <!-- total price -->
+            <div id="thidi" class="col-2 text-start">
+                <p class="fw-bold fs-4 mt-3 _{{@index}}"> <span>{{multi CartQuantity PriceOut}}</span> VNĐ</p>
+            </div>
+            <!-- action -->
+            <div class="col-1">
+                <button onclick="deletePrd({{@index}})" type="button" class="btn p-2" style="background-color: #3D592C; color: #FFF;"><span
+                        class="small">DELETE</span></button>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <!-- bill calc -->
+    <div id="billCalc" class="row">
+        <div class="row d-flex align-items-center pt-3 pb-3" style="background-color: #D7BEBE; padding:0">
+            <div class="col-1 ps-5 ms-3 form-check">
+                <input class="form-check-input border-black" type="checkbox" value="" id="CheckDefault" onclick="tickAll()">
+            </div>
+            <div id="TotalEle" class="col-2">Select All (0)</div>
+            <div class="col-2 fs-5 fw-bolder offset-2 text-end">Total Price: </div>
+            <div class="col-2 fs-4 fw-bold" style="color: #3D592C;">
+                <span id="TotalPrice">0</span>
+                <span>VNĐ</span>
+            </div>
+            <div class="col-2 text-end">
+                <button onclick="checkout({{UserID}})" class="btn btn-primary" style="background-color: #ee860f; border: 0; border-radius: 0">CHECK OUT</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let Total = 0;
+    let TotalEle = 0;
+    // Attach an event listener to the checkbox
+    function checkTicked(index){
+        let a = document.querySelector(`#flexCheckDefault ._${index}`);
+        // Check if the checkbox is checked
+        if (a.checked) {
+            let b = document.querySelector(`#thidi ._${index} span`).innerHTML;
+            Total += parseInt(b);
+            TotalEle += 1;
+        } else {
+            let b = document.querySelector(`#thidi ._${index} span`).innerHTML;
+            Total -= parseInt(b);
+            TotalEle -= 1;
+        }
+        document.getElementById("TotalPrice").innerHTML = `${Total}`;
+        document.getElementById("TotalEle").innerHTML = `Select All (${TotalEle})`;
+    }
+
+    function tickAll(){
+        let a = document.getElementById("CheckDefault");
+        let elms = document.getElementsByClassName("FCI");
+        let Ele = 0;
+
+        if(a.checked){
+            Ele = 0;
+            Array.from(elms).forEach((x) => {     
+                if(!x.checked){
+                    x.checked = true;
+                    checkTicked(Ele);
+                }
+                Ele += 1;
+            })
+        }
+        else{
+            Ele = 0;
+            Array.from(elms).forEach((x) => {
+                x.checked = false;
+                checkTicked(Ele);
+                Ele += 1;
+            })
+        }
+    }
+
+    function UpdateCartData(CustomerID, ProductID, quantity){
+        $.post('/cart', {CustomerID: CustomerID, ProductID: ProductID, quantity: quantity})
+        .done((rs) => {
+        })
+        .fail((rs) => console.log(rs));
+    }
+
+    function sub(index){
+        let quantity = parseInt(document.querySelector(`#item1-quant ._${index}`).innerHTML) - 1;
+        if(quantity > 0){
+            document.querySelector(`#item1-quant ._${index}`).innerHTML = quantity;
+            let totalTmp = parseInt(document.querySelector(`#thidi ._${index} span`).innerHTML);
+            let PriceOut = parseInt(document.querySelector(`#PriceOut ._${index}`).innerHTML);
+            document.querySelector(`#thidi ._${index} span`).innerHTML = `${totalTmp - PriceOut}`;
+            let ProductID = parseInt(document.querySelector(`#ProductID ._${index}`).innerHTML);
+
+            let a = document.querySelector(`#flexCheckDefault ._${index}`);
+            if(a.checked){
+                Total -= PriceOut;
+                document.getElementById("TotalPrice").innerHTML = `${Total}`;
+            }
+
+            // Update database
+            UpdateCartData({{UserID}}, ProductID, quantity);
+        }
+        else{
+            deletePrd(index);
+        }
+    }
+    
+    function plus(index){
+        let quantity = parseInt(document.querySelector(`#item1-quant ._${index}`).innerHTML) + 1;
+        let Instock = parseInt(document.querySelector(`#Instock ._${index}`).innerHTML)
+        if(quantity <= Instock){
+            document.querySelector(`#item1-quant ._${index}`).innerHTML = quantity;
+            let totalTmp = parseInt(document.querySelector(`#thidi ._${index} span`).innerHTML);
+            let PriceOut = parseInt(document.querySelector(`#PriceOut ._${index}`).innerHTML);
+            document.querySelector(`#thidi ._${index} span`).innerHTML = `${totalTmp + PriceOut}`;
+            let ProductID = parseInt(document.querySelector(`#ProductID ._${index}`).innerHTML);
+
+            let a = document.querySelector(`#flexCheckDefault ._${index}`);
+            if(a.checked){
+                Total += PriceOut;
+                document.getElementById("TotalPrice").innerHTML = `${Total}`;
+            }
+
+            // Update database
+            UpdateCartData({{UserID}}, ProductID, quantity);
+        }
+        else{
+            alert("Out of stock?");
+        }
+    }
+
+    function deletePrd(index){
+        let userResponse = confirm("Remove from cart?");
+        if (userResponse){
+            let ProductID = parseInt(document.querySelector(`#ProductID ._${index}`).innerHTML);
+
+            // Update database
+            $.post('/cart', {CustomerID: {{UserID}}, ProductID: ProductID, quantity: 0})
+            .done((rs) => {
+                console.log(rs);
+                window.location.href = '/cart';
+            })
+            .fail((rs) => console.log(rs))
+        }
+    }
+
+    function checkout(CustomerID){
+        if(document.getElementById("TotalPrice").innerHTML == "0"){
+            alert("You have not selected a product yet!!");
+        }
+        else{
+            let MerchandiseSubtotal = document.getElementById("TotalPrice").innerHTML;
+            let elms = document.getElementsByClassName("FCI");
+            var selectedItems = [];
+            let Ele = 0;
+            Array.from(elms).forEach((x) => {
+                if(x.checked){
+                    let ProductName = document.querySelector(`#ProductName ._${Ele}`).innerHTML;
+                    let Category = document.querySelector(`#Category ._${Ele}`).innerHTML;
+                    let ProductID = parseInt(document.querySelector(`#ProductID ._${Ele}`).innerHTML);
+                    let img = document.querySelector(`#img ._${Ele}`).src;
+                    let PriceOut = parseInt(document.querySelector(`#PriceOut ._${Ele}`).innerHTML);
+                    let quantity = parseInt(document.querySelector(`#item1-quant ._${Ele}`).innerHTML);
+                    let TotalPrice = parseInt(document.querySelector(`#thidi ._${Ele} span`).innerHTML);
+                    let Instock = parseInt(document.querySelector(`#Instock ._${Ele}`).innerHTML)
+                    selectedItems.push({ProductName: ProductName,
+                                        Category: Category,
+                                        ProductID: ProductID,
+                                        img: img,
+                                        UnitPrice: PriceOut,
+                                        Quantity: quantity,
+                                        TotalPrice: TotalPrice,
+                                        Instock: Instock
+                                    });
+                }
+                Ele += 1;
+            })
+            
+            localStorage.setItem("MerchandiseSubtotal", JSON.stringify(MerchandiseSubtotal));
+            localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+            window.location.href = "/checkout";
+        }
+    }
+
+</script>

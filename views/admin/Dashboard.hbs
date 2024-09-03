@@ -1,0 +1,225 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="row">
+    <div class="col-3" style="padding: 0;">
+                 <div class="sidebar" style = "border: none;">
+            <div class="box_logo d-flex align-items-center">
+                <div class="logo col-3">
+                    <i class="far fa-user"
+                        style="padding: 0 1em; scale: 9%; margin-bottom: 45px; margin-left: 20px;"></i>
+                </div>
+                <div class="admin col-8">
+                    <ul>
+                        <li class="d-flex align-items-center">
+                            <span style="font-size: 24px; font-weight: 500;">ADMIN</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li style="background-color: #ffb9a4;">
+                        <i class="fas fa-columns"></i>
+                        <a href="/admin">DASHBOARD</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-warehouse"></i>
+                        <a href="/Warehouse">WAREHOUSE</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <a href="/admin/warehouse/addProduct">ADD PRODUCTS</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-store"></i>
+                        <a href="/Order">ORDERS</a>
+                    </li>
+                      <li>
+                        <i class="fas fa-user"></i>
+                        <a href="/users">Users</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comments"></i>
+                        <a href="/feedback">Feedbacks</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comment-dots"></i>
+                        <a href="/chat/chatbox/list">CHAT</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <a href="/account/logout">LOGOUT</a>
+                    </li>
+                </ul>
+        </div>
+        </div>
+    </div>
+    <div class="col-9 border-start border-black" style="padding: 0;">
+        <div class="content">
+            <div class="title">
+                <span style="margin-left: 45px;">Dashboard</span>
+            </div>
+        </div>
+        <div class="linechart">
+            <div class="d-flex align-items-center"
+                style="padding-left: 10px;height: 50px;background-color: #E7E7E7;border-radius: 10px;">
+                <span> MONTHLY REVENUE STATISTICS IN YEAR: </span>
+                <select class="rounded-3 btn btn-light btn-sm ms-2" name="year" id="yearSelect">
+                    <option id="yearOption" value="{{Year}}" selected>{{Year}}</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center" style="height: 80%;width: 75%;margin-left: 120px; margin-top: 3%;">
+                <canvas id="YearLineChart"></canvas>
+            </div>
+        </div>
+        <div class="linechart">
+            <div class="d-flex align-items-center"
+                style="padding-left: 10px;height: 50px;background-color: #E7E7E7;border-radius: 10px;">
+                <span>DAILY REVENUE STATISTICS IN MONTH: </span>
+                <select class="rounded-3 btn btn-light btn-sm ms-2" name="month" id="monthSelect">
+                    <option id="monthOption" value="{{Month}}" selected>{{Month}}</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center" style="height: 80%;width: 75%;margin-left: 120px; margin-top: 3%;">
+                <canvas id="MonthLineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const today = new Date();
+    let yearSelect = document.getElementById('yearSelect');
+    for (let year = 2010; year <= today.getFullYear(); year++) {
+        let option = document.createElement('option');
+        option.text = year;
+        option.value = year;
+        yearSelect.add(option);
+    }
+    let monthSelect = document.getElementById('monthSelect');
+    for (let month = 1; month <= 12; month++) {
+        let option = document.createElement('option');
+        option.text = month;
+        option.value = month;
+        monthSelect.add(option);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const yearSelect = document.getElementById('yearSelect');
+        const monthSelect = document.getElementById('monthSelect');
+        yearSelect.addEventListener('change', function () {
+            let year = yearSelect.value;
+            let month = document.getElementById('monthOption').value;
+            if (year == today.getFullYear()) {
+                if (month > (today.getMonth() + 1)) {
+                    month = today.getMonth() + 1;
+                }
+            }
+            window.location.href = `/admin?year=${year}&month=${month}`;
+        });
+        monthSelect.addEventListener('change', function () {
+            let year = document.getElementById('yearOption');
+            let month = monthSelect.value;
+            if (year.value == today.getFullYear()) {
+                if (month > (today.getMonth() + 1)) {
+                    month = today.getMonth() + 1;
+                }
+            }
+            window.location.href = `/admin?year=${year.value}&month=${month}`;
+        });
+    });
+</script>
+
+<script>
+    // draw chart
+    document.addEventListener('DOMContentLoaded', function () {
+        const monthName = ['January','February','March','April','May','June',
+                            'July','August','September','October','November','December'];
+
+        let MonthlyList = JSON.parse(`{{{MonthlyList}}}`.replace(/(&quot\;)/g,"\""));
+        let MonthlyLabels = new Array();
+        let MonthlyValues = new Array();
+
+        for (let index = 0; index < MonthlyList.length; index++) {
+            MonthlyLabels.push(monthName[MonthlyList[index].month - 1]);
+            MonthlyValues.push(MonthlyList[index].price);
+        }
+
+        let data = {
+            labels: MonthlyLabels,
+            datasets: [{
+                label: 'Monthly Sales',
+                borderColor: 'rgb(75, 192, 192)',
+                data: MonthlyValues,
+                fill: false
+            }]
+        };
+
+        // Configuration options
+        let options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'category',
+                    labels: data.labels
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        // Get the canvas element
+        let ctx = document.getElementById('YearLineChart').getContext('2d');
+
+        // Create the line chart
+        let myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        let DailyList = JSON.parse(`{{{DailyList}}}`.replace(/(&quot\;)/g,"\""));
+        let DailyLabels = new Array();
+        let DailyValues = new Array();
+
+        for (let index = 0; index < DailyList.length; index++) {
+            DailyLabels.push(DailyList[index].day);
+            DailyValues.push(DailyList[index].price);
+        }
+
+        let data = {
+            labels: DailyLabels,
+            datasets: [{
+                label: 'Daily Sales',
+                borderColor: 'rgb(75, 192, 192)',
+                data: DailyValues,
+                fill: false
+            }]
+        };
+
+        // Configuration options
+        let options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'category',
+                    labels: data.labels
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        // Get the canvas element
+        let ctx = document.getElementById('MonthLineChart').getContext('2d');
+
+        // Create the line chart
+        let myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+    });
+</script>

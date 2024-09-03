@@ -1,0 +1,118 @@
+<div class="row m-0">
+    <div class="col-2 ps-0 pe-0">
+        <div class="account-side-bar">
+            <ul>
+                <li class="mb-1">
+                    <a href="/account/profile" style="color: #fff;font-size: 18px;">
+                        <i class="fas fa-user-circle" style="width: 20px;height: 20px;"></i>
+                        <span style="padding: 0 1em; text-align: justify; font-weight: 900;">MY ACCOUNT</span>
+                    </a>
+                </li>
+                <li class="mb-1">
+                    <a href="/mypurchase" style="color: #fff;font-size: 18px;">
+                        <i class="fas fa-cart-plus" style="width: 20px;height: 20px;"></i>
+                        <span style="padding: 0 1em; text-align: justify;">MY PURCHASE</span>
+                    </a>
+                </li>
+                <li class="mb-1">
+                    <a href="/account/password" style="color: #fff;font-size: 18px;">
+                        <i class="fas fa-unlock-alt" style="width: 20px;height: 20px;"></i>
+                        <span style="padding: 0 1em; text-align: justify;">MY PASSWORD</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-5 ps-0 account-ava" style="background-color: #3D5940;">
+        <form action="/account/changeAvatar" method="post" enctype="multipart/form-data" class="text-center"
+            style="position: relative;display: inline-block;margin-top: 20%;">
+            <img class="logo avatar mb-5" src={{profile.Photo}} style="width: 14rem;height: 14rem;">
+            <input name="photo" type="file" id="fileInputImage" style="display: none;" onchange="chooseFile(this)">
+            <label for="fileInputImage" class="upload-button" style="padding: 10px 20px;">SELECT IMAGE</label>
+            <input type="submit" class="mt-2 border" value="Change Avatar">
+        </form>
+    </div>
+    <div class="col-5 ps-0 account-profile">
+        <div class="ps-0" style="font-size: 24px;background-color: #D9D9D9;">
+            <span>My Profile</span>
+        </div>
+        <div class="container-fluid mt-2">
+            <form action="/account/profile" method="post">
+                <div class="mb-3 row offset-1 text-end" style="margin-left: 15%;">
+                    <label for="inputUserName" class="col-sm-3 col-form-label ps-5">USERNAME</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="inputUserName" name="inputUserName"
+                            value={{profile.UserName}} disabled readonly>
+                    </div>
+                </div>
+                <div class="mb-3 row offset-1 text-end" style="margin-left: 15%;">
+                    <label for="inputName" class="col-sm-3 col-form-label ps-5">NAME</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="inputName" name="inputName" value={{profile.Name}}>
+                    </div>
+                </div>
+                <div class="mb-3 row offset-1 text-end" style="margin-left: 15%;">
+                    <label for="inputEmail" class="col-sm-3 col-form-label ps-5">EMAIL</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="inputEmail" name="inputEmail"
+                            value={{profile.Email}} disabled readonly>
+                    </div>
+                </div>
+                <div class="mb-3 row offset-1 text-end" style="margin-left: 15%;">
+                    <label for="inputNumberPhone" class="col-sm-3 col-form-label ps-5">PHONE</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="inputNumberPhone" name="inputNumberPhone"
+                            value={{profile.Phone}} disabled readonly>
+                    </div>
+                </div>
+                <div class="mb-3 row offset-1 text-end" style="margin-left: 15%;">
+                    <span class="col-sm-3 col-form-label ps-5">GENDER</span>
+                    <div class="col" style="text-align: start;margin-top: 6px;">
+                        <div class="form-check form-check-inline" style="margin-right: 50px;">
+                            <label for="male" class="form-check-label">Male</label>
+                            <input class="form-check-input" type="radio" name="genderOptions" id="male" value="Male"
+                                {{#if (eq profile.Gender 'Male' )}}checked{{/if}}>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label" for="Female">Female</label>
+                            <input class="form-check-input" type="radio" name="genderOptions" id="female" value="Female"
+                                {{#if (eq profile.Gender 'Female' )}}checked{{/if}}>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 row offset-1 text-end" style="margin-left: 15%;">
+                    <label for="dob" class="col-sm-3 col-form-label ps-5">BIRTHDAY</label>
+                    <div class="col-sm-5">
+                        <input type="date" class="form-control" id="dob" name="dob" value={{dob}}>
+                    </div>
+                </div>
+                <div class="mb-3 row offset-1 text-end" style="margin-left: 15%;">
+                    <label for="inputAddress" class="col-sm-3 col-form-label ps-5">ADDRESS</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="inputAddress" name="inputAddress"
+                            value={{profile.Address}}>
+                    </div>
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <button class="btn fw-bold ps-5 pe-5" type="submit"
+                        style="background-color: #3D5940;color: #fff;">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function chooseFile(file) {
+        if (file.files && file.files[0]) {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                $('.avatar').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file.files[0]);
+        }
+    }
+    if ({{ successfulMessage }}) {
+        alert('Update successfully');
+        window.location.href = '/account/profile';
+    }    
+</script>

@@ -1,0 +1,167 @@
+<div class="row">
+    <div class="col-3" style="padding: 0;">
+            <div class="sidebar" style = "border: none;">
+            <div class="box_logo d-flex align-items-center">
+                <div class="logo col-3">
+                    <i class="far fa-user"
+                        style="padding: 0 1em; scale: 9%; margin-bottom: 45px; margin-left: 20px;"></i>
+                </div>
+                <div class="admin col-8">
+                    <ul>
+                        <li class="d-flex align-items-center">
+                            <span style="font-size: 24px; font-weight: 500;">ADMIN</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li>
+                        <i class="fas fa-columns"></i>
+                        <a href="/admin">DASHBOARD</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-warehouse"></i>
+                        <a href="/Warehouse">WAREHOUSE</a>
+                    </li>
+                    <li style="background-color: #ffb9a4;">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <a href="/admin/warehouse/addProduct">ADD PRODUCTS</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-store"></i>
+                        <a href="/Order">ORDERS</a>
+                    </li>
+                      <li>
+                        <i class="fas fa-user"></i>
+                        <a href="/users">Users</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comments"></i>
+                        <a href="/feedback">Feedbacks</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comment-dots"></i>
+                        <a href="/chat/chatbox/list">CHAT</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <a href="/account/logout">LOGOUT</a>
+                    </li>
+                </ul>
+        </div>
+        </div>
+    </div>
+    <div class="col-9 border-start border-black" style="padding: 0;">
+        <div class="content">
+            <div class="title">
+                <span style="margin-left: 45px;">Add Product</span>
+            </div>
+            <div class="container-fluid text-end mt-5">
+                <form id="postForm" action="/admin/warehouse/addProduct" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <small id="nameErr" class="text-danger col-sm-3 offset-2"></small>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputBookName" class="col-sm-3 col-form-label ps-5">BOOK NAME</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="bookName" class="form-control" id="inputBookName"
+                                placeholder="Enter name" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputAuthor" class="col-sm-3 col-form-label ps-5">AUTHORS</label>
+                        <div class="col-sm-7">
+                            <input type="text" name="author" class="form-control" id="inputAuthor"
+                                placeholder="Enter name" require>
+                        </div>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputCategories" class="col-sm-3 col-form-label ps-5">CATEGORY</label>
+                        <div class="col-sm-7">
+                            <select name="category" class="form-select form-control" required>
+                                <option value="">Choose category</option>
+                                <option value="1">Novel</option>
+                                <option value="2">Economics</option>
+                                <option value="3">Science</option>
+                                <option value="5">History</option>
+                                <option value="7">Detective</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputPubCompany" class="col-sm-3 col-form-label">PUBLISHING COMPANY</label>
+                        <div class="col-sm-7">
+                            <input type="text" name="pubCompany" class="form-control" id="inputPubCompany"
+                                placeholder="Enter name" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <small id="pubYearErr" class="text-danger col-sm-6 offset-1" style="margin-left: 121px"></small>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputPubYear" class="col-sm-3 col-form-label">PUBLISHING YEAR</label>
+                        <div class="col-sm-7">
+                            <input type="number" name="pubYear" class="form-control" id="inputPubYear"
+                                placeholder="Enter year" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputImPrice" class="col-sm-3 col-form-label ps-5">IMPORT PRICE</label>
+                        <div class="col-sm-7">
+                            <input type="number" name="inPrice" class="form-control" id="inputImPrice"
+                                placeholder="Enter price" required>
+                        </div>
+                    </div>
+                    <div class="row ps-4">
+                        <small id="quantityErr" class="text-danger col-sm-4 offset-2"></small>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputQuant" class="col-sm-3 col-form-label ps-5">QUANTITIES</label>
+                        <div class="col-sm-7">
+                            <input type="number" name="quantity" class="form-control" id="inputQuant"
+                                placeholder="Enter quantities" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputDesc" class="col-sm-3 col-form-label ps-5">DESCRIPTION</label>
+                        <div class="col-sm-7">
+                            <textarea class="form-control" name="des" id="inputDesc" rows="3"
+                                placeholder="Enter description"></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-3 row offset-1">
+                        <label for="inputImg" class="col-sm-3 col-form-label ps-5">IMAGE</label>
+                        <div class="col-sm-7">
+                            <input name="img" class="form-control" type="file" id="inputImg" required>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center mt-4">
+                        <button class="btn fw-bold ps-5 pe-5" type="submit"
+                            style="background-color: #ffb9a4;">PUBLISH</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(() => {
+        $("#inputImg").fileinput({ theme: 'fa5', showUpload: false, previewFileType: 'any' });
+        if (`{{nofi}}`) {
+            alert(`{{nofi}}`);
+        }
+        $("#postForm").submit(e => {
+            let regex = /^\s/;
+            $("#nameErr").html(regex.test($("#inputBookName").val()) ? "Book name is invalid!" : "");
+            $('#quantityErr').html($('#inputQuant').val() <= 0 ? "Book quantity must be greater than 0" : "");
+            $('#pubYearErr').html($('#inputPubYear').val() > new Date().getFullYear() ? "Book publish year mustn't be greater than current year" : "");
+            if ($("#nameErr").html() == "" && $('#quantityErr').html() == "" && $('#pubYearErr').html() == "") {
+                $('#postForm').submit();
+            }
+            else {
+                e.preventDefault();
+            }
+        })
+    })
+</script>

@@ -1,0 +1,119 @@
+<div class="row">
+    <div class="col-3" style="padding: 0;">
+        <div class="sidebar">
+            <div class="box_logo d-flex align-items-center">
+                <div class="logo col-3">
+                    <i class="far fa-user"
+                        style="padding: 0 1em; scale: 9%; margin-bottom: 45px; margin-left: 20px;"></i>
+                </div>
+                <div class="admin col-8">
+                    <ul>
+                        <li class="d-flex align-items-center">
+                            <span style="font-size: 24px; font-weight: 500;">ADMIN</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li>
+                        <i class="fas fa-columns"></i>
+                        <a href="/admin">DASHBOARD</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-warehouse"></i>
+                        <a href="/Warehouse">WAREHOUSE</a>
+                    </li>
+                    <li style="background-color: #ffb9a4;">
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <a href="/admin/warehouse/addProduct">ADD PRODUCTS</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-store"></i>
+                        <a href="Order">ORDERS</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comment-dots"></i>
+                        <a href="/chat/chatbox/list">CHAT</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <a href="/account/logout">LOGOUT</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-9 border-start border-black" style="padding: 0;">
+        <div class="content">
+            <div class="title">
+                <span style="padding-left: 45px;">Post Product</span>
+            </div>
+            <div class="container-fluid text-end mt-5">
+                <div class="row">
+                    <div class="col-3 ps-4">
+                        <img src='{{Product.Photo}}' style="width: 100%; height: 16rem;" alt="">
+                    </div>
+                    <form action="./postProduct" method="post" class="col-9">
+                        <div class="mb-3 row">
+                            <label for="inputBookName" class="col-sm-4 col-form-label ps-5">BOOK NAME</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="inputBookName" value='{{Product.ProductName}}'
+                                    disabled readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputAuthor" class="col-sm-4 col-form-label ps-5">AUTHORS</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="inputAuthor" value='{{Product.Author}}' disabled
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputCategories" class="col-sm-4 col-form-label ps-5">CATEGORY</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="inputCategories" value='{{Product.CateName}}'
+                                    disabled readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPubCompany" class="col-sm-4 col-form-label">PUBLISHING COMPANY</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="inputPubCompany" value='{{Product.PublishingCompany}}'
+                                    disabled readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputPubYear" class="col-sm-4 col-form-label">PUBLISHING YEAR</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" id="inputPubYear" value='{{Product.PublishingYear}}' disabled
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputImPrice" class="col-sm-4 col-form-label ps-5">SALE PRICE</label>
+                            <div class="col-sm-7">
+                                <input type="number" name="SalePrice" class="form-control" id="inputImPrice" placeholder="Enter price"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="inputDesc" class="col-sm-4 col-form-label ps-5">DESCRIPTION</label>
+                            <div class="col-sm-7">
+                                <textarea name="Description" class="form-control" id="inputDesc" rows="3"
+                                    placeholder="Enter description"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="ProductID" value={{Product.ProductID}}>
+                        <div class="col-12 text-center mt-4">
+                            <button class="btn fw-bold ps-5 pe-5" type="submit"
+                                style="background-color: #ffb9a4;">POST</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!-- Form to log in -->
+<div class="container-fluid text-end mb-5" style="margin-top: 5%;">
+  <form action="/account/login" method="post" id="loginForm">
+    <div class="mb-3 row offset-1" style="margin-left: 20%;">
+      <label for="inputUserName" class="col-sm-3 col-form-label ps-5">USERNAME</label>
+      <div class="col-sm-5">
+        <input name="inputUserName" type="text" class="form-control" id="inputUserName" placeholder="Enter username"
+          required>
+      </div>
+    </div>
+    <small id="usernameErr" class="text-danger d-flex justify-content-center"></small>
+    <div class="row offset-1" style="margin-left: 20%;">
+      <label for="inputPassword" class="col-sm-3 col-form-label ps-5">PASSWORD</label>
+      <div class="col-sm-5">
+        <input type="password" class="form-control" name="inputPassword" id="inputPassword" placeholder="Enter password"
+          required>
+      </div>
+    </div>
+    {{#if failure}}
+      <small id="Err" class="text-danger d-flex justify-content-center mb-3 mt-1" style="margin-left:-100px">Wrong Password!!!</small>
+    {{/if}}
+    <div class="col-12 text-center mt-4">
+      <button class="btn fw-bold ps-5 pe-5" type="submit" style="background-color: #3D5940;color: #fff;">LOG IN</button>
+    </div>
+  </form>
+</div>
+<!-- Register - Forgot password -->
+<div class="row m-0">
+  <div class="col-sm-4"></div>
+  <div class="col-sm-3">
+    <a href="/account/register"><u>Sign up</u></a>
+  </div>
+  <div class="col-sm-2">
+    <a href="/account/forgotpassword"><u>Forgot Password</u></a>
+  </div>
+</div>
+<script>
+  $(() => {
+    $('#loginForm').submit(function (e) {
+      // check use
+      regex = /[\/\\\[\];|=,+\*\?<>]/;
+      $('#usernameErr').html(regex.test($('#inputUserName').val()) ? 'Username does not contain the following characters / \ [ ] ; | = , + * ? < >' : '');
+      if ($('#usernameErr').html() === '') {
+        $('#loginForm').submit();
+      } else {
+        e.preventDefault();
+      }
+    });
+  })
+</script>

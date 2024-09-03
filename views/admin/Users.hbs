@@ -1,0 +1,226 @@
+<script>
+    let allData = [];
+    let currentPage = 1;
+    const resultsPerPage = 8;
+
+    // Lấy danh sách người dùng từ API
+    async function fetchDataAndUpdateTable(search = '') {
+        const searchParam = search ? `?search=${encodeURIComponent(search)}` : '';
+        const url = `http://localhost:3000/users/all${searchParam}`;
+
+        try {
+            const response = await fetch(url);
+            const users = await response.json();
+            allData = users;
+            currentPage = 1;
+            updateTable();
+            updatePagination();
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
+
+    // Cập nhật bảng với dữ liệu người dùng
+    function updateTable() {
+        const start = (currentPage - 1) * resultsPerPage;
+        const end = start + resultsPerPage;
+        const data = allData.slice(start, end);
+
+        const tbody = document.getElementById('userTableBody');
+        tbody.innerHTML = '';
+
+        data.forEach((user, index) => {
+            const row = `<tr>
+                            <th scope="row">${index + 1}</th>
+                            <td>${user.UserName}</td>
+                            <td>${user.Email}</td>
+                            <td class="text-center">
+                                 <i class="fas fa-trash delete-user" style="cursor: pointer; color: red;" data-user-id="${user.UserID}"></i>
+                            </td>
+                        </tr>`;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+
+        addDeleteEventListeners();
+    }
+
+    // Thêm sự kiện xóa cho các nút xóa người dùng
+    function addDeleteEventListeners() {
+        const deleteButtons = document.querySelectorAll('.delete-user');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const userId = this.getAttribute('data-user-id');
+
+                const confirmDelete = confirm('Are you sure you want to delete this user?');
+                if (confirmDelete) {
+                    try {
+                        const response = await fetch(`http://localhost:3000/users/${userId}`, {
+                            method: 'DELETE',
+                        });
+
+                        if (response.ok) {
+                            this.parentElement.parentElement.remove();
+                            alert('User deleted successfully.');
+                            fetchDataAndUpdateTable(); // Reload the data after deletion
+                        } else {
+                            alert('Failed to delete user.');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting user:', error);
+                    }
+                }
+            });
+        });
+    }
+
+    // Cập nhật phân trang
+    function updatePagination() {
+        const totalPage = Math.ceil(allData.length / resultsPerPage);
+        const start = (currentPage - 1) * resultsPerPage + 1;
+        const end = Math.min(currentPage * resultsPerPage, allData.length);
+
+        const pageInfo = document.querySelector('.pageInfo');
+        pageInfo.innerHTML = `Showing ${start} - ${end} of ${allData.length} results`;
+
+        const prevPageButton = document.getElementById('prevPage');
+        prevPageButton.disabled = (currentPage === 1);
+
+        const nextPageButton = document.getElementById('nextPage');
+        nextPageButton.disabled = (currentPage === totalPage);
+
+        const pageNumberDisplay = document.getElementById('currentPage');
+        pageNumberDisplay.textContent = currentPage.toString().padStart(2, '0');
+    }
+
+    window.onload = function () {
+        document.getElementById('prevPage').addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+                updatePagination();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', function () {
+            const totalPage = Math.ceil(allData.length / resultsPerPage);
+
+            if (currentPage < totalPage) {
+                currentPage++;
+                updateTable();
+                updatePagination();
+            }
+        });
+
+        document.getElementById('searchButton').addEventListener('click', function () {
+            const searchInput = document.getElementById('searchInput').value.trim();
+            fetchDataAndUpdateTable(searchInput);
+        });
+
+        // Khởi tạo dữ liệu khi tải trang
+        fetchDataAndUpdateTable();
+    }
+</script>
+
+<div class="row">
+    <div class="col-3" style="padding: 0;">
+        <div class="sidebar" style = "border: none;">
+            <div class="box_logo d-flex align-items-center">
+                <div class="logo col-3">
+                    <i class="far fa-user"
+                        style="padding: 0 1em; scale: 9%; margin-bottom: 45px; margin-left: 20px;"></i>
+                </div>
+                <div class="admin col-8">
+                    <ul>
+                        <li class="d-flex align-items-center">
+                            <span style="font-size: 24px; font-weight: 500;">ADMIN</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li>
+                        <i class="fas fa-columns"></i>
+                        <a href="/admin">DASHBOARD</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-warehouse"></i>
+                        <a href="/Warehouse">WAREHOUSE</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <a href="/admin/warehouse/addProduct">ADD PRODUCTS</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-store"></i>
+                        <a href="/Order">ORDERS</a>
+                    </li>
+                      <li style="background-color: #ffb9a4;">
+                        <i class="fas fa-user"></i>
+                        <a href="/users">Users</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comments"></i>
+                        <a href="/feedback">Feedbacks</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comment-dots"></i>
+                        <a href="/chat/chatbox/list">CHAT</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <a href="/account/logout">LOGOUT</a>
+                    </li>
+                </ul>
+        </div>
+        </div>
+    </div>
+    <div class="col-9" style="padding: 0;">
+        <div class="content">
+            <div class="title">
+                <span style="margin-left: 45px;">User Management</span>
+            </div>
+            <div class="container" style="margin-top: 70px;">
+                <div class="row">
+                    <div class="col-5 d-flex">
+                        <input type="text" id="searchInput" class="form-control border border-dark border-end-0"
+                            placeholder="Search by username or email" aria-describedby="button-addon">
+                        <button style="width: 40px;" class="btn btn-outline-secondary border border-dark border-start-0"
+                            type="button" id="searchButton"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="col-7"></div>
+                </div>
+                <div class="line"></div>
+                <div id="userList">
+                </div>
+                <table id="userTable" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th class="text-center" scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- Danh sách người dùng sẽ được hiển thị ở đây -->
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <div class="pageInfo">
+                        <span>Showing 1 - 8 results of </span>
+                        <span id="totalResults">0</span>
+                    </div>
+                    <div class="pagebutton d-flex align-items-center">
+                        <i class="fas fa-arrow-left" id="prevPage"></i>
+                        <div style="padding: 0 20px;">
+                            <span>Page </span>
+                            <span id="currentPage">01</span>
+                        </div>
+                        <i class="fas fa-arrow-right" id="nextPage"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

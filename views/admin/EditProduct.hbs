@@ -1,0 +1,108 @@
+  <div class="container">
+    <h2>Edit Product</h2>
+    <form id="editProductForm" class="edit-product-form">
+        
+        <label for="productName" class="form-label">Product Name:</label>
+        <input type="text" id="productName" name="productName" class="form-input" required>
+
+        <label for="author" class="form-label">Author:</label>
+        <input type="text" id="author" name="author" class="form-input">
+
+        <label for="description" class="form-label">Description:</label>
+        <textarea id="description" name="description" class="form-textarea" rows="4"></textarea>
+
+        <label for="photo" class="form-label">Photo URL:</label>
+        <input type="text" id="photo" name="photo" class="form-input">
+
+        <label for="quantity" class="form-label">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" class="form-input" min="0" required>
+
+        <label for="priceIn" class="form-label">Import Price (VND):</label>
+        <input type="number" id="priceIn" name="priceIn" class="form-input" min="0" required>
+
+        <label for="priceOut" class="form-label">Selling Price (VND):</label>
+        <input type="number" id="priceOut" name="priceOut" class="form-input" min="0" required>
+
+        <label for="publishingCompany" class="form-label">Publishing Company:</label>
+        <input type="text" id="publishingCompany" name="publishingCompany" class="form-input">
+
+        <label for="publishingYear" class="form-label">Publishing Year:</label>
+        <input type="number" id="publishingYear" name="publishingYear" class="form-input" min="0">
+
+        <label for="status" class="form-label">Status:</label>
+        <select id="status" name="status" class="form-select">
+            <option value="Active">Active</option>
+            <option value="Deactive" selected>Deactive</option>
+        </select>
+        
+        <button type="submit" class="form-button">Save Changes</button>
+    </form>
+</div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const productID = new URLSearchParams(window.location.search).get('productID');
+            fetch(`http://localhost:3000/warehouse/product/${productID}`)
+                .then(response => response.json())
+                .then(products => {
+
+                     const product = products[0];
+                    // Điền thông tin sản phẩm vào các trường nhập liệu
+                    document.getElementById('productName').value = product.ProductName;
+                    document.getElementById('author').value = product.Author;
+                    document.getElementById('description').value = product.Descrip;
+                    document.getElementById('photo').value = product.Photo;
+                    document.getElementById('quantity').value = product.Quantity;
+                    document.getElementById('priceIn').value = product.PriceIn;
+                    document.getElementById('priceOut').value = product.PriceOut;
+                    document.getElementById('publishingCompany').value = product.PublishingCompany;
+                    document.getElementById('publishingYear').value = product.PublishingYear;
+                    const statusSelect = document.getElementById('status');
+                    if (product.Status === 'Active') {
+                        statusSelect.value = 'Active';
+                    } else {
+                        statusSelect.value = 'Deactive';
+                    }
+                })
+                .catch(error => console.error('Error fetching product details:', error));
+        });
+
+        document.getElementById('editProductForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+             const productID = new URLSearchParams(window.location.search).get('productID');
+         
+            const updatedProduct = {
+                ProductName: document.getElementById('productName').value,
+                Author: document.getElementById('author').value,
+                Descrip: document.getElementById('description').value,
+                Photo: document.getElementById('photo').value,
+                Quantity: document.getElementById('quantity').value,
+                PriceIn: document.getElementById('priceIn').value,
+                PriceOut: document.getElementById('priceOut').value,
+                PublishingCompany: document.getElementById('publishingCompany').value,
+                PublishingYear: document.getElementById('publishingYear').value,
+                Status: document.getElementById('status').value,
+            };
+
+            fetch(`http://localhost:3000/warehouse/updateProduct/${productID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedProduct),
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Update result:', result);
+                    alert('Product updated successfully');
+                    window.location.href = '/Warehouse';
+                })
+                .catch(error => {
+                    console.error('Error updating product:', error);
+                    alert('Failed to update product');
+                });
+        });
+    </script>

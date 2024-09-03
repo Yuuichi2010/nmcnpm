@@ -1,0 +1,283 @@
+    <style>
+        .rateStars{
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0px;
+        }
+        .checkedStar {
+            color: orange;
+        }
+        progress{
+            background-color: #3D592C;
+            height: 10px;
+            width: 400px;
+            border-radius: 100px;
+            opacity: 0.3;
+        }
+        progress::-webkit-progress-value {
+        background-color: rgb(1, 116, 9); 
+        border-radius: 0px 100px 100px 0px;
+        }
+        progress::-moz-progress-bar {
+        background-color: rgb(0, 0, 0); 
+        border-radius: 5px;
+        }   
+    </style>
+
+<body>
+    <!-- Item -->
+    <div class="d-flex" style="margin-left: 200px; margin-right: 200px">
+        <div style="width: 40%; padding-top: 50px; padding-bottom: 100px; text-align: center;">
+            <img class="w-75" src={{Book.Photo}}>
+        </div>
+        <div style="width: 60%; padding: 30px;">
+            <div style="color: #173F5F;
+            font-size: 60px;
+            font-style: normal;
+            font-weight: 600;"
+            id="ProductName">
+            {{Book.ProductName}}
+        </div>
+            <div style="color: #000;
+            font-size: 32px;
+            font-style: normal;
+            font-weight: 600;
+            ">
+                <span>Author: {{Book.Author}}</span>
+                <br>
+                <span>Publisher: {{Book.PublishingCompany}}</span>
+                <br>
+                <span style="color: #EE4E4E;  font-size: 60px;" id="PriceOut">{{Book.PriceOut}}</span><span style="color: #EE4E4E;  font-size: 60px;"> VNĐ</span>
+                <div class="rateStars" style="font-size: 32px;">
+                    {{#each (generateArr Book.Rating)}}
+                    <i class="fas fa-star star"></i>
+                    {{/each}}
+                    {{#each (generateArr (sub 5 Book.Rating)) }}
+                    <i class="far fa-star star"></i>
+                    {{/each}}
+                </div>
+                <!-- quantity -->
+                <div class="d-flex">
+                    <span style="margin-right: 30px;">Quantity</span>
+                    <div class="w-50">
+                        <button type="button" id="item1-sub" class="btn border-dark" style="background-color: #D9D9D9;" onclick="sub()"><span class="fw-bold">-</span></button>
+                        <button type="button" class="btn border-dark" style="background-color: #D9D9D9;"><span class="small" id="item1-quant" >1</span></button>
+                        <button type="button" id="item1-plus" class="btn border-dark" style="background-color: #D9D9D9;"><span class="fw-bold" onclick="plus()">+</span></button>
+                    </div>
+                </div>
+                <div style="padding: 10px; padding-left: 0px;">
+                    <button type="button" class="btn btn-success" style="color: #FFF;
+                    text-align: center;
+                    font-size: 20px;
+                    border-radius: 15px;
+                    border: 3px solid #000;
+                    background: #3D5940;
+                    width: 300px;
+                    height: 50px;"
+                    onclick="buyNow()">
+                    BUY NOW
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-secondary" style="color: #000;
+                    text-align: center;
+                    font-size: 20px;
+                    border-radius: 15px;
+                    border: 3px solid #000;
+                    background: #FFF;
+                    width: 300px;
+                    height: 50px;"
+                    onclick="addToCart()">
+                    ADD TO CART
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Description -->
+    <div style="border: 1px solid #ABABAB;
+    background: linear-gradient(146deg, #E6EDE5 74.5%, rgba(142, 189, 152, 0.00) 79.28%);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    padding: 40px;">
+        <div style="color: #000;
+        font-size: 32px;
+        font-weight: 600;
+        text-transform: capitalize;">
+            Tóm Tắt Sản Phẩm
+        </div>
+        <br>
+        <div style="color: #003C4A;
+        text-align: justify;
+        font-size: 20px;
+        font-weight: 300;
+        text-transform: capitalize;">
+            {{Book.Descrip}}
+        </div>
+        
+    </div>
+    <br>
+    <br>
+    <!-- Feedback -->
+    <div style="color: #000;
+    font-size: 30px;
+    text-transform: capitalize;
+    padding: 50px;">
+        Khách Hàng Đánh Giá
+    </div>
+    <div style="padding: 100px; padding-top: 0px;">
+        <div style="color: #000;
+        font-size: 30px;
+        text-transform: capitalize;
+        padding-bottom: 30px;">
+        Tổng Quan
+        </div>
+        <div class="row"  style="align-items: end;">
+            <div class="col-1" style="font-size: 40px;">{{Book.Rating}}</div>
+            <div class="col-4">
+                <div class="rateStars" style="font-size: 33px">
+                    {{#each (generateArr Book.Rating)}}
+                    <i class="fas fa-star star"></i>
+                    {{/each}}
+                    {{#each (generateArr (sub 5 Book.Rating)) }}
+                    <i class="far fa-star star"></i>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Counter -->
+        <div class="row">
+            <div class="col-2" 
+            style="color: rgba(0, 0, 0sfdsaf, 0.37);
+            font-size: 15px;">({{Book.Total}} đánh giá)</div>
+        </div>
+        
+
+        <!-- Feedback Statistic -->
+
+        {{#each Ratings}}
+        <div class="row align-items-center" style="padding-top: 10px;">
+            <div class="col-2">
+                <div class="rateStars"> 
+                    {{#each (generateArr Rating)}}
+                    <i class="fas fa-star star"></i>
+                    {{/each}}
+                    {{#each (generateArr (sub 5 Rating)) }}
+                    <i class="far fa-star star"></i>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="col-4">
+                <progress value={{Num}} max={{TotalNum}}></progress>
+            </div>
+            <div class="col-1">{{Num}}</div>
+        </div>
+        {{/each}}
+
+        
+    </div>
+    <!-- Comment -->
+    {{#each Feedbacks}}
+    <div class="d-flex" style="padding: 100px; padding-top: 0px;">
+        <div><img src={{Photo}} style="width: 70px; border-radius: 100px;"></div>
+        <div style="width: 100%;">
+            <div class="row">
+                <div class="col-1">{{Name}}</div>
+                <div class="col-2">
+                    <div class="rateStars">
+                        {{#each (generateArr Rating)}}
+                        <i class="fas fa-star star"></i>
+                        {{/each}}
+                        {{#each (generateArr (sub 5 Rating)) }}
+                        <i class="far fa-star star"></i>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12" 
+                style="color: #000;
+                font-size: 20px;
+                font-weight: 400;
+                padding-top: 20px;">
+                {{Feedback}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    {{!-- Hidden --}}
+    <div id="Instock" style="display: none;">{{Book.Quantity}}</div>
+    <div id="Category" style="display: none;">{{Book.CateName}}</div>
+    <div id="ProductID" style="display: none;">{{Book.ProductID}}</div>
+    <div id="img" style="display: none;">{{Book.Photo}}</div>
+</body>
+<script>
+    function sub() {
+        let quantity = parseInt(document.querySelector(`#item1-quant`).innerHTML) - 1;
+        if (quantity > 0) {
+            document.querySelector(`#item1-quant`).innerHTML = quantity;
+        } 
+    }
+    function plus() {
+        let quantity = parseInt(document.querySelector(`#item1-quant`).innerHTML) + 1;
+        let AInstock = parseInt(document.getElementById("Instock").innerHTML);
+        if(quantity > AInstock) {
+            alert('Quantity is larger than the whole reserve');
+        }
+        else {
+        if (quantity > 0) {
+            document.querySelector(`#item1-quant`).innerHTML = quantity;
+        } 
+        }
+    }
+    function buyNow() {
+        const selectedItems = [];
+        let ProductName = document.getElementById("ProductName").innerHTML;
+        ProductName = ProductName.trim();
+        let Category = document.getElementById("Category").innerHTML;
+        let ProductID = document.getElementById("ProductID").innerHTML;
+        let img = document.getElementById("img").innerHTML;
+        let PriceOut = document.getElementById("PriceOut").innerHTML;
+        let quantity = document.getElementById("item1-quant").innerHTML;
+        let TotalPrice = parseInt(quantity) * parseInt(PriceOut) + 10000;
+        let Instock = document.getElementById("Instock").innerHTML;
+        let AInstock = parseInt(document.getElementById("Instock").innerHTML);
+        if(quantity > AInstock) {
+            alert('Quantity is larger than the whole reserve');
+        }
+        else {
+        selectedItems.push({ProductName: ProductName,
+                                        Category: Category,
+                                        ProductID: ProductID,
+                                        img: img,
+                                        UnitPrice: PriceOut,
+                                        Quantity: quantity,
+                                        TotalPrice: TotalPrice,
+                                        Instock: Instock
+                                    });
+        localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+        let MerchandiseSubtotal = TotalPrice;
+        localStorage.setItem("MerchandiseSubtotal", JSON.stringify(MerchandiseSubtotal));
+        window.location.href = "/checkout";
+        }
+    }
+    function addToCart() {
+        let ProductID = parseInt(document.getElementById("ProductID").innerHTML);
+        let quantity = parseInt(document.getElementById("item1-quant").innerHTML);
+        // Update database
+        let Instock = parseInt(document.getElementById("Instock").innerHTML);
+        if(quantity > Instock) {
+            alert('Quantity is larger than the whole reserve');
+        }
+        else {
+            alert('Item is added to cart!');
+            $.post('/cart/add', {CustomerID: {{UserID}}, ProductID: ProductID, quantity: quantity})
+            .done((rs) => {
+                console.log(rs);
+            })
+            .fail((rs) => console.log(rs));
+        }
+    }
+</script>

@@ -1,0 +1,343 @@
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function () {
+    const orderId = getOrderIdFromPath();
+    const response = await fetch(`http://localhost:3000/order/${orderId}`);
+    const orderData = await response.json();
+
+    // fetch api and display order details
+    updateOrderDetails(orderData);
+
+    // Add event listener to dropdown items
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const selectedStatus = item.textContent;
+
+            updateOrderStatus(orderId, selectedStatus);
+        });
+    });
+});
+
+
+async function updateOrderStatus(orderId, selectedStatus) {
+    try {
+      
+        const response = await fetch(`http://localhost:3000/order/updateStatus`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId: parseInt(orderId, 10), selectedStatus: selectedStatus }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            
+            setDropdownStatus(selectedStatus);
+            console.log(result.message);
+        } else {
+            console.error(result.message);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+
+    function updateOrderDetails(orderData) {
+        
+
+        // Cập nhật ngày đặt hàng
+        const orderDateElement = document.querySelector('.time span');
+        orderDateElement.textContent = `Date: ${formatOrderTime(orderData.CreateTime)}`;
+
+        // Cập nhật Order ID
+        const orderIDElement = document.querySelector('.orderID span');
+        orderIDElement.textContent = `Order ID: ${orderData[0].OrderID}`;
+
+        // Cập nhật trạng thái đơn hàng
+        const statusElement = document.getElementById('statusDropdown');
+        const statusTextElement = statusElement.querySelector('.status-text');
+        statusTextElement.textContent = orderData[0].Status;
+  
+
+
+        // Cập nhật thông tin khách hàng
+        const customerInfoElement = document.querySelector('.customerInfo .row');
+        customerInfoElement.innerHTML = `
+            <div class="col-1 d-flex jcr">
+                <i class="fas fa-user-circle fa-lg" style="color: #982f2f;"></i>
+            </div>
+            <div class="col-3">
+                <span class="titleInfo">Customer</span>
+                <br>
+                <span>${orderData[0].BuyerName}</span>
+                <br>
+                <span>${orderData[0].BuyerEmail}</span>
+            </div>
+            <div class="col-1 d-flex jcr">
+                <i class="fas fa-shipping-fast fa-lg" style="color: #992f2f;"></i>
+            </div>
+            <div class="col-3">
+                <span class="titleInfo">Shipping information</span>
+                <br>
+                <span>Transport Unit: ${orderData[0].ShipmentDetail}</span>
+            </div>
+            <div class="col-1 d-flex jcr">
+                <i class="fas fa-address-card fa-lg" style="color: #982f2f;"></i>
+            </div>
+            <div class="col-3">
+                <span class="titleInfo">Address</span>
+                <br>
+                <span>${orderData[0].BuyerAddress}</span>
+            </div>
+        `;
+
+        // Cập nhật danh sách sản phẩm
+      const productListElement = document.querySelector('.order .row');
+productListElement.innerHTML = '';
+
+orderData.forEach(product => {
+    const productHTML = `
+    
+        <div class="col-5 d-flex ">
+            <img src="${product.Photo}" alt="${product.ProductName}">
+            <div>
+                <span class="Ordername">${product.ProductName}</span>
+                <br>
+                <span>${product.Author}</span>
+            </div>
+        </div>
+        <div class="col-2">
+            <span>${product.ProductPrice} VNĐ</span>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+            <span>${product.Quantity}</span>
+        </div>
+        <div class="col-3">
+            <span>${product.Subtotal} VNĐ</span>
+        </div>
+      
+    `;
+    
+    productListElement.innerHTML += productHTML;
+});
+
+
+        // Cập nhật tổng giá
+        const totalPriceElement = document.querySelector('.orderTotal .row:last-child .col-7 span');
+        totalPriceElement.textContent = `${orderData[0].TotalPrice} VNĐ`;
+
+        const priceof = document.querySelector('.orderTotal .row:nth-child(1) .col-5 span');
+        priceof.textContent = `Price: ${orderData[0].TotalPrice-orderData[0].ShippingFee} VNĐ`;
+        // Cập nhật phí vận chuyển
+        const shippingFeeElement = document.querySelector('.orderTotal .row:nth-child(2) .col-6 span');
+        shippingFeeElement.textContent = `Delivery Cost: ${orderData[0].ShippingFee} VNĐ`;
+        
+    }
+
+    function formatOrderTime(orderTime) {
+        return moment(orderTime).format('HH:mm:ss [ngày] DD [tháng] MM [năm] YYYY');
+    }
+
+    function getOrderIdFromPath() {
+  
+    const path = window.location.pathname;
+
+  
+ const match = path.match(/\/order\/detail\/(\d+)/);
+
+
+    return match ? match[1] : null;
+}
+
+ function backToOrders() {   
+            window.location.href = '/order';
+        }
+
+function setDropdownStatus(status) {
+    const statusTextElement = document.querySelector('.status-text');
+    statusTextElement.textContent = status;
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const orderId = getOrderIdFromPath();
+
+    const response = await fetch(`http://localhost:3000/order/${orderId}`);
+    const orderData = await response.json();
+
+    updateOrderDetails(orderData);
+    setDropdownStatus(orderData[0].Status);
+
+    const completedButton = document.querySelector('.delivered');
+    completedButton.addEventListener('click', async function () {
+        try {
+            const orderId = getOrderIdFromPath();
+            
+            const response = await fetch(`http://localhost:3000/order/complete`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ orderId: parseInt(orderId, 10) }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                const statusElement = document.querySelector('.dropdown button');
+                statusElement.textContent = 'Completed';
+
+                console.log(result.message);
+            } else {
+                console.error(result.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+});
+
+        
+</script>
+
+
+<div class="order-container">
+    <div class="title">
+        <span style="margin-left: 45px;">Orders Details</span>
+    </div>
+    <button onclick="backToOrders()" class="back">BACK TO ORDERS</button>
+    <div class="container" style="padding: 0;">
+        <div class="orderInfo">
+            <div class="row">
+                <div class="col-1">
+                    <i class="fas fa-calendar fa-lg"></i>
+                </div>
+                <div class="col-8">
+                    <div class="time d-flex">
+                        <span>Date: <span class="orderDate"></span></span>
+                    </div>
+                    <div class="orderID">
+                        <span>Order ID: </span>
+                        <span class="orderId"></span>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="dropdown">
+                        <button id="statusDropdown" class="btn btn-secondary dropdown-toggle" style="background-color: white; color: black;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="status-text">Status</span>
+                    </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" >Processing</a></li>
+                            <li><a class="dropdown-item">Delivered</a></li>
+                            <li><a class="dropdown-item" >Completed</a></li>
+                            <li><a class="dropdown-item" >Shipping</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <div class="customerInfo">
+            <div class="row">
+                <div class="col-1 d-flex jcr">
+                    <i class="fas fa-user-circle fa-lg" style="color: #982f2f;"></i>
+                </div>
+                <div class="col-3">
+                    <span class="titleInfo">Customer</span>
+                    <br>
+                    <span class="buyerName"></span>
+                    <br>
+                    <span class="buyerEmail"></span>
+                </div>
+                <div class="col-1 d-flex jcr">
+                    <i class="fas fa-shipping-fast fa-lg" style="color: #992f2f;"></i>
+                </div>
+                <div class="col-3">
+                    <span class="titleInfo">Shipping information</span>
+                    <br>
+                    <span>Transport Unit: <span class="shipmentDetail"></span></span>
+                </div>
+                <div class="col-1 d-flex jcr">
+                    <i class="fas fa-address-card fa-lg" style="color: #982f2f;"></i>
+                </div>
+                <div class="col-3">
+                    <span class="titleInfo">Address</span>
+                    <br>
+                    <span class="buyerAddress"></span>
+                </div>
+            </div>
+        </div>
+        <div class="boxDescription">
+            <div class="boxTitle">
+                <div class="row">
+                    <div class="col-5">
+                        <span>Book name</span>
+                    </div>
+                    <div class="col-2">
+                        <span>Price</span>
+                    </div>
+                    <div class="col-2">
+                        <span>Quantities</span>
+                    </div>
+                    <div class="col-3">
+                        <span>Total price</span>
+                    </div>
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="order">
+                <div class="row d-flex align-items-center" >
+                    <div class="col-5 d-flex">
+                        <div>
+                            <span class="Ordername"></span>
+                            <br>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <span></span>
+                    </div>
+                    <div class="col-2 d-flex justify-content-center">
+                        <span></span>
+                    </div>
+                    <div class="col-3">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="line"></div>
+            <div class="footer-container">
+            <button onclick="" class="delivered">Completed</button>
+            <div class="orderTotal">
+                <div class="row">
+                    <div class="col-5">
+                        <span>Price: </span>
+                    </div>
+                    <div class="col-7 d-flex jcr">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <span>Delivery Cost: </span>
+                    </div>
+                    <div class="col-6 d-flex jcr">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-5">
+                        <span>Total price: </span>
+                    </div>
+                    <div class="col-7 d-flex jcr">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>

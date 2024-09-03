@@ -1,0 +1,383 @@
+<!-- slider -->
+<div class="row m-0">
+  <div id="carouselExampleIndicators" class="carousel slide p-0" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+        aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"
+        aria-label="Slide 4"></button>
+    </div>
+    <div class="carousel-inner">
+      {{#each prds}}
+      {{#if (eq @index 0)}}
+      <div class="carousel-item active">
+        {{else}}
+        <div class="carousel-item">
+          {{/if}}
+          <div class="card mb-3 ">
+            <div class="row m-0 g-0">
+              <div class="col-md-7 leftCard">
+                <div class="card-body offset-1 col-10 d-flex align-items-center greenTitle" style="height: 90vh">
+                  <div>
+                    <h5 class="card-title fs-2 fw-bold">{{ProductName}} </h5>
+                    <p class="card-text mt-4 mb-4">{{Descrip}}</p>
+                    <a class="btn btn-lg btn-outline-success greenButton" href="/book/{{ProductID}}" role="button"><span
+                        class="p-3 fw-light fs-6">READ MORE &nbsp; &rarr; </span></a></a></a>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-md-5">
+                <img src={{Photo}} class="img-fluid rounded-start w-100" alt="..." style="height: 90vh">
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- top categories -->
+  <div class="row m-0 mt-5 d-flex  align-items-center justify-content-center">
+    <div class="col-3 card topCategogriesCard">
+      <a href="/products/search?cate=1"><img
+          src="https://images.unsplash.com/photo-1599495054627-35ad07218a46?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxOTA3MDh8MHwxfHNlYXJjaHw0fHxub3ZlbHxlbnwwfHx8fDE2NTIwNzk3NjY&ixlib=rb-1.2.1&q=85"
+          class="card-img" style="height:45vh" alt="..."> </a>
+      <h3 class="card-title fw-bold col-11" style="background-color: #75757575;">Novels</h3>
+    </div>
+    <div class="card col-3 m-3 topCategogriesCardTitle">
+      <div class="card-body p-0">
+        <h3 class="card-title fw-bold mt-5 mb-5">Explore our books</h3>
+        <a href="/products/search?inputBook=" class="btn btn-primary">Explore</a>
+      </div>
+    </div>
+    <div class="col-3 card topCategogriesCard">
+      <a href="/products/search?cate=2"><img
+          src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/content/edu/art/5cc2f86cf0d42.jpeg"
+          class="card-img" style="height:45vh" alt="..."> </a>
+      <h5 class="card-title fw-bold col-11" style="background-color: #75757575;">Economic Books</h5>
+    </div>
+  </div>
+
+  <div class="row m-0 mb-5 d-flex align-items-center justify-content-center">
+    <div class="col-3 card topCategogriesCard">
+      <a href="/products/search?cate=3"><img
+          src="https://image.slidesdocs.com/responsive-images/background/blackboard-with-chalk-drawn-science-drawing-using-glass-beakers-and-trays-isolated-photo-copy-space-powerpoint-background_0805baa708__960_540.jpg"
+          class="card-img" style="height:45vh" alt="..."> </a>
+      <h5 class="card-title fw-bold col-11" style="background-color: #75757575;">Science Books</h5>
+    </div>
+    <div class="col-3 m-3 card topCategogriesCard">
+      <a href="/products/search?cate=5"><img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrVtTU4f3uhqZA_mqThRHusY9Xu6jqzlBVog&usqp=CAU"
+          class="card-img" style="height:45vh; " alt="..."> </a>
+      <h5 class="card-title fw-bold col-11" style="background-color: #75757575;">History Book</h5>
+    </div>
+    <div class="col-3 card topCategogriesCard">
+      <a href="/products/search?cate=5"><img
+          src="https://booktrib.com/wp-content/uploads/2020/07/Untitled-design-22.jpg" class="card-img"
+          style="height:45vh" alt="..."> </a>
+      <h5 class="card-title fw-bold col-11" style="background-color: #75757575;">Detective Books</h5>
+    </div>
+  </div>
+
+  <!-- new release -->
+  <div class="text-center">
+    <h3 class="greenTitle fw-bold ls-wide">New Release Books</h3>
+    <p class="text-secondary">100+ books are published by different authors everyday. </p>
+    <div><a href="" class="fw-bold" style="color: #826F8A">View all products &rarr;</a></div>
+  </div>
+
+  <div class="row m-0 m-3">
+    <div id="releaseBooksCarouselIndicators" class="carousel slide">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#releaseBooksCarouselIndicators" data-bs-slide-to="0" class="active"
+          aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#releaseBooksCarouselIndicators" data-bs-slide-to="1"
+          aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#releaseBooksCarouselIndicators" data-bs-slide-to="2"
+          aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner mb-5 p-3">
+        <!-- slide1 -->
+        <div class="carousel-item active text-center">
+          {{#each newPrds }}
+          {{#if (in @index 0 3)}}
+          <div class="card d-inline-block me-4 p-3 shadow border-0 text-center" style="width: 15rem; height: 30rem">
+            <a href="/book/{{ProductID}}">
+              <img src={{Photo}} class="card-img-top m-4 img-thumbnail" style="width: 10rem; height: 12rem;" alt="...">
+              <div class="card-body" style="height: 18rem">
+                <div style="height: 5rem">
+                  <h6 class="card-title fw-bold greenTitle pb-4 pt-1 text-uppercase ls-wide">{{ProductName}}</h6>
+                </div>
+                <div style="height: 3rem">
+                  <p class="card-text text-body-tertiary text-capitalize fw-light ls-wide">{{Author}}</p>
+                </div>
+                <p class="mt-3">
+                  {{#each (generateArr Rating)}}
+                  <i class="fas fa-star star"></i>
+                  {{/each}}
+                  {{#each (generateArr (sub 5 Rating)) }}
+                  <i class="far fa-star star"></i>
+                  {{/each}}
+                </p>
+              </div>
+            </a>
+          </div>
+          {{/if}}
+          {{/each}}
+        </div>
+        <!-- slide2 -->
+        <div class="carousel-item offset-1">
+          {{#each newPrds }}
+          {{#if (in @index 4 7)}}
+          <div class="card d-inline-block me-4 p-3 shadow border-0 text-center" style="width: 15rem; height: 30rem">
+            <a href="/book/{{ProductID}}">
+              <img src={{Photo}} class="card-img-top m-4 img-thumbnail" style="width: 10rem; height: 12rem;" alt="...">
+              <div class="card-body" style="height: 18rem">
+                <div style="height: 5rem">
+                  <h6 class="card-title fw-bold greenTitle pb-4 pt-1 text-uppercase ls-wide">{{ProductName}}</h6>
+                </div>
+                <div style="height: 3rem">
+                  <p class="card-text text-body-tertiary text-capitalize fw-light ls-wide">{{Author}}</p>
+                </div>
+                <p class="mt-3">
+                  {{#each (generateArr Rating)}}
+                  <i class="fas fa-star star"></i>
+                  {{/each}}
+                  {{#each (generateArr (sub 5 Rating)) }}
+                  <i class="far fa-star star"></i>
+                  {{/each}}
+                </p>
+              </div>
+            </a>
+          </div>
+          {{/if}}
+          {{/each}}
+        </div>
+        <!-- slide 3 -->
+        <div class="carousel-item offset-1">
+          {{#each newPrds }}
+          {{#if (in @index 8 11)}}
+          <div class="card d-inline-block me-4 p-3 shadow border-0 text-center" style="width: 15rem; height: 30rem">
+            <a href="/book/{{ProductID}}">
+              <img src={{Photo}} class="card-img-top m-4 img-thumbnail" style="width: 10rem; height: 12rem;" alt="...">
+              <div class="card-body" style="height: 18rem">
+                <div style="height: 5rem">
+                  <h6 class="card-title fw-bold greenTitle pb-4 pt-1 text-uppercase ls-wide">{{ProductName}}</h6>
+                </div>
+                <div style="height: 3rem">
+                  <p class="card-text text-body-tertiary text-capitalize fw-light ls-wide">{{Author}}</p>
+                </div>
+                <p class="mt-3">
+                  {{#each (generateArr Rating)}}
+                  <i class="fas fa-star star"></i>
+                  {{/each}}
+                  {{#each (generateArr (sub 5 Rating)) }}
+                  <i class="far fa-star star"></i>
+                  {{/each}}
+                </p>
+              </div>
+            </a>
+          </div>
+          {{/if}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <!-- week book -->
+  {{#with featuredPrd}}
+  <div class="row m-0 d-flex justify-content-center">
+    <div class="card m-5 offset-2 col-10 border-0">
+      <div class="row m-0 g-0">
+        <div class="col-md-5 offset-1">
+          <img src={{Photo}} class="img-fluid rounded-start " style="width: 22rem; height: 33rem;" alt="...">
+        </div>
+        <div class="col-md-6">
+          <div class="card-body ms-4 pt-5 mt-5">
+            <p class="card-text"><small class="text-secondary fw-bold">Featured book of the week</small></p>
+            <h3 class="card-title greenTitle fw-bold ">{{ProductName}}</h3>
+            <p class="mt-3">
+              {{#each (generateArr Rating)}}
+              <i class="fas fa-star star"></i>
+              {{/each}}
+              {{#each (generateArr (sub 5 Rating)) }}
+              <i class="far fa-star star"></i>
+              {{/each}}
+            </p>
+            <p class="card-text text-body-secondary">{{Descrip}}</p>
+            <a class="btn btn-lg btn-outline-success greenButton" href="/book/{{ProductID}}" role="button"><span
+                class="p-3 fw-light fs-6">VIEW MORE &nbsp; &rarr; </span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/with}}
+
+
+  <!-- comming soon -->
+  <div class="row m-0">
+    <div id="commingSoonCarouselIndicators" class="carousel slide offset-1 col-10" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#commingSoonCarouselIndicators" data-bs-slide-to="0" class="active"
+          aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#commingSoonCarouselIndicators" data-bs-slide-to="1"
+          aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#commingSoonCarouselIndicators" data-bs-slide-to="2"
+          aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#commingSoonCarouselIndicators" data-bs-slide-to="3"
+          aria-label="Slide 4"></button>
+      </div>
+      <div class="carousel-inner">
+        {{#each commingSoonPrds }}
+        {{#if (eq @index 0)}}
+        <div class="carousel-item active">
+          {{else}}
+          <div class="carousel-item">
+            {{/if}}
+            <div class="card mb-3 ">
+              <div class="row m-0 g-0" style="background-color: #BEBEBE;">
+                <div class="col-md-9">
+                  <div class="card-body offset-1 col-10 d-flex align-items-center greenTitle" style="height: 50vh">
+                    <div class="text-center">
+                      <h1 class="card-title fs-2 fw-bold text-capitalize">comming soon </h1>
+                      <h5 class="mt-4">{{ProductName}} - {{Author}}</h5>
+                      <p class="card-text mb-4">{{Descrip}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <img src={{Photo}} class="img-fluid w-100 rounded p-4 " alt="..." style="height: 20rem;">
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+  {{!-- Chat box --}}
+  <div class="CustomerChat">
+    <div id="CustomerFrameChat" class="d-flex align-items-center">
+      <img src="https://robohash.org/idlaudantiumdeserunt.png?size=50x50&set=set1"
+        style="scale: 120%; border-radius: 50%; border: 1px solid black; background-color: #3D592C;">
+      <div style="margin-left: 15px;">
+        <div
+          style="background-color: #f4fbf3; width: 290px; border-radius: 20px 20px 20px 0; padding: 20px; border: 1px solid gray;">
+          <p style="font-size: 18px; font-weight: 600;">Welcome to our website</p>
+          <p>Nice to meet you! If you have any question about our services, feel free to contact us.</p>
+        </div>
+        <button style="width: 290px;" class="ButtonCustomerChat" onclick="CustomerChat()">Chat with us</button>
+      </div>
+    </div>
+    <div id="CustomerChatBox" class="d-none">
+      <div class="row align-items-center"
+        style="background: linear-gradient(90deg, #DEDEDE -3.12%, #749473 48.22%, #3D5940 105.52%);
+        box-shadow: 0px 6px 18px 0px rgba(17, 30, 45, 0.14); width: 290px; border-radius: 10px 10px 0 0; border: 1px solid gray; border-bottom: 0;">
+        <div class="col-2">
+          <img src="https://robohash.org/idlaudantiumdeserunt.png?size=50x50&set=set1"
+            style="scale: 80%; border-radius: 50%; border: 2px solid black; background-color:  #3D592C;">
+        </div>
+        <div class="col-8">
+          <p style="margin-left: 10px; font-size: 20px; margin-top: 10px;">ADMIN</p>
+        </div>
+        <div class="col-1">
+          <button style="border: 0; background:#3D5940 105.52%" onclick="CustomerCloseChat()">X</button>
+        </div>
+
+      </div>
+      <div class="CustomerBoxChat" id="chatboxShow">
+        <span class="CustomerBoxChatMess AdminMess">Chào bạn! Bạn Cần Hỗ Trợ Gì ?</span>
+      </div>
+      <div class="">
+        <form id="chatForm">
+          <div class="row" style="margin-right: 19px">
+            <div class="col-11 p-0"> <input id="message" type="text" name="userChat" class="form-control"
+                placeholder="What do you need?" aria-describedby="button-addon2"
+                style="border-radius: 0 0 0 10px; border: 1px solid gray">
+            </div>
+            <input type="hidden" value={{data}} id="username">
+            <div class="col-1 p-0">
+              <button class="btn btn-outline-secondary" type="submit" id="button-addon2"
+                style="background-color: white; border-radius: 0 0 10px 0;"><i class="far fa-paper-plane"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+  integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  function CustomerChat() {
+    let a = document.getElementById("CustomerFrameChat");
+    a.classList.add("d-none");
+    let b = document.getElementById("CustomerChatBox");
+    b.classList.remove("d-none");
+  }
+  function CustomerCloseChat() {
+    let a = document.getElementById("CustomerChatBox");
+    a.classList.add("d-none");
+    let b = document.getElementById("CustomerFrameChat");
+    b.classList.remove("d-none");
+  }
+  $(function () {
+    var socket = io();
+    $('#chatForm').submit(function () {
+      socket.emit('chat message', $('#message').val(), '1', $('#username').val());
+      $('#message').val('');
+      return false;
+    });
+    socket.on('chat message', function (msg, flag) {
+      if (flag == '1') {
+        let b = document.getElementById("chatboxShow").innerHTML;
+        b += `<p class="CustomerBoxChatMess CustomerMess">` + msg + `</p>`
+        document.getElementById("chatboxShow").innerHTML = b;
+        $('#chatShow').scrollTop()
+      } else {
+        let b = document.getElementById("chatboxShow").innerHTML;
+        b += `<p class="CustomerBoxChatMess AdminMess">` + msg + `</p>`
+        document.getElementById("chatboxShow").innerHTML = b;
+      }
+    })
+
+  });
+  $(document).ready(function () {
+    $('#button-addon2').click(function (e) {
+      var username = $('#username').val();
+      var msg = $('#message').val();
+      $.ajax({
+        method: 'post',
+        url: '/chat/user-chat',
+        data: {
+          username: username,
+          msg: msg,
+          isAdmin: false
+        }
+      });
+    })
+  })
+</script>

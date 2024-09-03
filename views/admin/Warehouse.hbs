@@ -1,0 +1,290 @@
+<script>
+
+    const itemsPerPage = 8;
+    let currentPage = 1;
+    let totalProducts = 0;
+   function fetchAndDisplayProducts(options = {}) {
+    const { search, filter, sort } = options;
+    const url = `http://localhost:3000/warehouse/all?search=${search || ''}&filter=${filter || ''}&sort=${sort || ''}`;
+            fetch(url)
+            .then(response => response.json())
+            .then(products => {
+                totalProducts = products.length;
+                document.querySelector('.container').innerHTML = '';
+
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                // Hiển thị sản phẩm mới
+                products.slice(startIndex, endIndex).forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product', 'row', 'd-flex', 'align-items-center');
+                    productElement.innerHTML = `
+            <div class="col-5 d-flex">
+                <img src="${product.Photo}">
+                <span class="Bookname">${product.ProductName}</span>
+            </div>
+            <div class="col-2 text-center">
+                <span class="ptitle">INSTOCK</span>
+                <div class="stock">${product.Quantity}</div>
+            </div>
+            <div class="col-3 text-center">
+                <p class="ptitle">IMPORT PRICE</p>
+                <span class="ptitle">${product.PriceIn} VND</span>
+            </div>
+            <div class="col-2 button" style="display: flex; flex-direction: column;">
+    <button onclick="exportProduct('${product.ProductID}')">
+        <i class="far fa-paper-plane"></i>
+    </button>
+     <button onclick="editProduct('${product.ProductID}')"><i class="fas fa-pencil-alt"></i></button>
+   <button onclick="deleteProduct('${product.ProductID}')"><i class="far fa-trash-alt"></i></button>
+</div>
+            <div class = "Pagination">
+                
+  <div class="pageInfo">
+    <span>Showing ${(currentPage - 1) * itemsPerPage + 1} - ${(currentPage - 1) * itemsPerPage + itemsPerPage} results of </span>
+    <span>${totalProducts}</span>
+  </div>
+  <!-- Nút chuyển trang -->
+  <div class="pagebutton d-flex align-items-center">
+    <button class="page" onclick="changePage('prev')"><i class="fas fa-chevron-left"></i></button>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle no-border"
+        style="background-color: white; color: black;" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        Page ${currentPage}
+      </button>
+    </div>
+    <button class="page" onclick="changePage('next')"><i class="fas fa-chevron-right"></i></button>
+  </div>
+          `;
+
+                    document.querySelector('.container').appendChild(productElement);
+                });
+                document.querySelector('.pageInfo span:nth-child(2)').textContent = totalProducts;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+            
+    }
+
+    function changePage(direction) {
+        if (direction === 'prev') {
+            currentPage = Math.max(1, currentPage - 1);
+        } else {
+            currentPage += 1;
+        }
+
+        fetchAndDisplayProducts();
+    }
+document.addEventListener('DOMContentLoaded', function () {
+
+    fetchAndDisplayProducts();
+    const filterButton = document.getElementsByClassName('filterButton');
+
+    const filterDropdown = document.getElementById('filterDropdown');
+    const filterDropdownItems = filterDropdown.querySelectorAll('.dropdown-item');
+    filterDropdownItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const selectedCategory = this.textContent.trim();
+            filterButton[0].textContent = selectedCategory;
+            fetchAndDisplayProducts({ filter: selectedCategory });
+        });
+    });
+
+    const sortedDropdown = document.getElementById('sortedDropdown');
+    const sortedDropdownItems = sortedDropdown.querySelectorAll('.dropdown-item');
+    const sortButton = document.getElementsByClassName('sortButton');
+    sortedDropdownItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+            const selectedSortOption = this.textContent.trim();
+            sortButton[0].textContent = selectedSortOption;
+            let sortParameter = '';
+
+            switch (selectedSortOption) {
+                case 'Price low to high':
+                    sortParameter = 'PriceIn';
+                    break;
+                case 'Price high to low':
+                    sortParameter = 'PriceIn DESC';
+                    break;
+                case 'In stock low to high':
+                    sortParameter = 'Quantity';
+                    break;
+                case 'In stock high to low':
+                    sortParameter = 'Quantity DESC';
+                    break;
+                case 'Name A to Z':
+                    sortParameter = 'ProductName';
+                    break;
+                case 'Name Z to A':
+                    sortParameter = 'ProductName DESC';
+                    break;
+                default:
+                    break;
+            }
+
+            fetchAndDisplayProducts({ sort: sortParameter });
+        });
+    });
+
+        const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    if (searchInput && searchButton) {
+        searchButton.addEventListener('click', function () {
+            
+            const searchValue = searchInput.value;
+            console.log(searchValue);
+            fetchAndDisplayProducts({ search: searchValue });
+        });
+    }
+});
+
+
+ 
+
+
+    
+
+    function exportProduct(productID) {
+        window.location.href = `admin/warehouse/postProduct?ProductID=${productID}`;
+    }
+
+function deleteProduct(productID) {
+        if (confirm('Are you sure you want to delete this product?')) {
+            fetch(`http://localhost:3000/warehouse/deleteProduct?productID=${productID}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Delete result:', result);
+                alert('Product deleted successfully');
+                fetchAndDisplayProducts();
+            })
+            .catch(error => {
+                console.error('Error deleting product:', error);
+                alert('Failed to delete product');
+            });
+        }
+    }
+    function editProduct(productID) {
+    window.location.href = `warehouse/edit?productID=${productID}`;
+}
+
+
+
+</script>
+
+
+<div class="row">
+    <div class="col-3" style="padding: 0;">
+                <div class="sidebar" style = "border: none;">
+            <div class="box_logo d-flex align-items-center">
+                <div class="logo col-3">
+                    <i class="far fa-user"
+                        style="padding: 0 1em; scale: 9%; margin-bottom: 45px; margin-left: 20px;"></i>
+                </div>
+                <div class="admin col-8">
+                    <ul>
+                        <li class="d-flex align-items-center">
+                            <span style="font-size: 24px; font-weight: 500;">ADMIN</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav">
+                <ul>
+                    <li>
+                        <i class="fas fa-columns"></i>
+                        <a href="/admin">DASHBOARD</a>
+                    </li>
+                    <li style="background-color: #ffb9a4;">
+                        <i class="fas fa-warehouse"></i>
+                        <a href="/Warehouse">WAREHOUSE</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-cart-arrow-down"></i>
+                        <a href="/admin/warehouse/addProduct">ADD PRODUCTS</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-store"></i>
+                        <a href="/Order">ORDERS</a>
+                    </li>
+                      <li>
+                        <i class="fas fa-user"></i>
+                        <a href="/users">Users</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comments"></i>
+                        <a href="/feedback">Feedbacks</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-comment-dots"></i>
+                        <a href="/chat/chatbox/list">CHAT</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <a href="/account/logout">LOGOUT</a>
+                    </li>
+                </ul>
+        </div>
+        </div>
+    </div>
+    <div class="col-9" style="padding: 0;">
+        <div class="content">
+            <div class="title">
+                <span style="margin-left: 45px;">Warehouse</span>
+                <a href="AddProduct.html">+ Add new book</a>
+            </div>
+            <div class="row d-flex align-items-center">
+                <div class="col-5 d-flex" style="padding: 20px 0 20px 50px;">
+                    <input type="text" id="searchInput" class="form-control border border-dark border-end-0" placeholder="Search"
+                        aria-describedby="button-addon">
+                    <button style="width: 40px;" class="btn btn-outline-secondary border border-dark border-start-0" type="button" id="searchButton"><i class="fas fa-search"></i></button>
+
+                </div>
+                <div class="col-2"></div>
+                <div class="col-2 d-flex align-items-center">
+                    <span>Filter: </span>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle filterButton"
+                            style="background-color: white; color: black; border: 0;" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Option
+                        </button>
+                        <ul class="dropdown-menu"  id="filterDropdown">
+                            <li><a class="dropdown-item">Kinh Tế</a></li>
+                            <li><a class="dropdown-item">Khoa Học</a></li>
+                            <li><a class="dropdown-item">Khoa Học Viễn Tưởng</a></li>
+                            <li><a class="dropdown-item">Lịch Sử</a></li>
+                            <li><a class="dropdown-item">Tiểu Thuyết</a></li>
+                            <li><a class="dropdown-item">Tự Truyện</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-2 d-flex align-items-center">
+                    <span>Sorted: </span>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle sortButton"
+                            style="background-color: white; color: black; border: 0;" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Option
+                        </button>
+                        <ul class="dropdown-menu" id="sortedDropdown">
+                            <li><a class="dropdown-item">Price low to high</a></li>
+                            <li><a class="dropdown-item">Price high to low</a></li>
+                            <li><a class="dropdown-item">In stock low to high</a></li>
+                            <li><a class="dropdown-item">In stock high to low</a></li>
+                            <li><a class="dropdown-item">Name A to Z</a></li>
+                            <li><a class="dropdown-item">Name Z to A</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+            </div>
+        </div>
+
+    </div>
+</div>

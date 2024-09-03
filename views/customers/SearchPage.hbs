@@ -1,0 +1,149 @@
+<!-- sort by -->
+{{#if filter}}
+  <div class="row mt-4">
+  <div class="offset-1 col">
+    <span class="text-uppercase fw-bold ls-wide">sort by</span>
+    <div class="dropdown d-inline-block ms-4">
+      <button class="btn btn-secondary btn-sm dropdown-toggle bg-light text-dark" type="button"
+        data-bs-toggle="dropdown" aria-expanded="false" style="width: 11rem;">
+        {{filter}}
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/products/search?inputBook={{book}}&filter=Latest&cate={{cate}}">Latest</a></li>
+        <li><a class="dropdown-item" href="/products/search?inputBook={{book}}&filter=Best Seller&cate={{cate}}">Best Seller</a></li>
+        <li><a class="dropdown-item" href="/products/search?inputBook={{book}}&filter=Tittle (A to Z)&cate={{cate}}">Title (A to Z)</a></li>
+        <li><a class="dropdown-item" href="/products/search?inputBook={{book}}&filter=Tittle (Z to A)&cate={{cate}}">Title (Z to A)</a></li>
+        <li><a class="dropdown-item" href="/products/search?inputBook={{book}}&filter=Price (Low to High)&cate={{cate}}">Price (Low to High)</a></li>
+        <li><a class="dropdown-item" href="/products/search?inputBook={{book}}&filter=Price (High to Low)&cate={{cate}}">Price (High to Low)</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{{/if}}
+
+<!-- Products -->
+<div class="productsContainer ps-5 mb-5 mt-3">
+  <div class="text-center">
+    {{#each prds }}
+    {{#if (in @index 0 3)}}
+    <div class="card d-inline-block me-4 p-3 shadow border-0 text-center" style="width: 15rem; height: 30rem">
+      <a href="/book/{{ProductID}}">
+        <img src={{Photo}} class="card-img-top m-4 img-thumbnail" style="width: 10rem; height: 12rem;" alt="...">
+        <div class="card-body" style="height: 18rem">
+          <div style="height: 6rem" class="d-flex align-items-center justify-content-center">
+            <h6 class="card-title fw-bold greenTitle text-uppercase" style="font-size: 15px;">{{ProductName}}</h6>
+          </div>
+          <div style="height: 2rem" class="d-flex align-items-center justify-content-center">
+            <p class="card-text fw-bold" style="color: brown;">{{PriceOut}} VND</p>
+          </div>
+          <div style="height: 2rem" class="d-flex align-items-center justify-content-center">
+            <p class="card-text text-body-tertiary text-capitalize fw-light ls-wide">{{Author}}</p>
+          </div>
+          <p class="">
+            {{#each (generateArr Rating)}}
+            <i class="fas fa-star star"></i>
+            {{/each}}
+            {{#each (generateArr (sub 5 Rating)) }}
+            <i class="far fa-star star"></i>
+            {{/each}}
+          </p>
+        </div>
+      </a>
+    </div>
+    {{/if}}
+    {{/each}}
+  </div>
+  <div class="text-center mt-3">
+    {{#each prds }}
+    {{#if (in @index 4 7)}}
+    <div class="card d-inline-block me-4 p-3 shadow border-0 text-center" style="width: 15rem; height: 30rem">
+      <a href="/book/{{ProductID}}">
+        <img src={{Photo}} class="card-img-top m-4 img-thumbnail" style="width: 10rem; height: 12rem;" alt="...">
+        <div class="card-body" style="height: 18rem">
+          <div style="height: 6rem" class="d-flex align-items-center justify-content-center">
+            <h6 class="card-title fw-bold greenTitle text-uppercase" style="font-size: 15px;">{{ProductName}}</h6>
+          </div>
+          <div style="height: 2rem" class="d-flex align-items-center justify-content-center">
+            <p class="card-text fw-bold" style="color: brown;">{{PriceOut}} VND</p>
+          </div>
+          <div style="height: 2rem" class="d-flex align-items-center justify-content-center">
+            <p class="card-text text-body-tertiary text-capitalize fw-light ls-wide">{{Author}}</p>
+          </div>
+          <p class="">
+            {{#each (generateArr Rating)}}
+            <i class="fas fa-star star"></i>
+            {{/each}}
+            {{#each (generateArr (sub 5 Rating)) }}
+            <i class="far fa-star star"></i>
+            {{/each}}
+          </p>
+        </div>
+      </a>
+    </div>
+    {{/if}}
+    {{/each}}
+  </div>
+  <div class="text-center mt-3">
+    {{#each prds }}
+    {{#if (in @index 8 11)}}
+    <div class="card d-inline-block me-4 p-3 shadow border-0 text-center" style="width: 15rem; height: 30rem">
+      <a href="/book/{{ProductID}}">
+        <img src={{Photo}} class="card-img-top m-4 img-thumbnail" style="width: 10rem; height: 12rem;" alt="...">
+        <div class="card-body" style="height: 18rem">
+          <div style="height: 6rem" class="d-flex align-items-center justify-content-center">
+            <h6 class="card-title fw-bold greenTitle text-uppercase" style="font-size: 15px;">{{ProductName}}</h6>
+          </div>
+          <div style="height: 2rem" class="d-flex align-items-center justify-content-center">
+            <p class="card-text fw-bold" style="color: brown;">{{PriceOut}} VND</p>
+          </div>
+          <div style="height: 2rem" class="d-flex align-items-center justify-content-center">
+            <p class="card-text text-body-tertiary text-capitalize fw-light ls-wide">{{Author}}</p>
+          </div>
+          <p class="">
+            {{#each (generateArr Rating)}}
+            <i class="fas fa-star star"></i>
+            {{/each}}
+            {{#each (generateArr (sub 5 Rating)) }}
+            <i class="far fa-star star"></i>
+            {{/each}}
+          </p>
+        </div>
+      </a>
+    </div>
+    {{/if}}
+    {{/each}}
+  </div>
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+  </ul>
+</nav>
+<script>
+  $(() => {
+    let page = {{ page }};
+    let total = {{ totalPages }};
+    let tmp = page;
+    if (page == 1) tmp = 2;
+    let raw = `<li class="page-item">
+                  <a class="page-link" href="/products/search?inputBook={{book}}&filter={{filter}}&cate={{cate}}&page=${tmp - 1}">Previous</a>
+                </li>`;
+    for (let i = 0; i < total; i++) {
+      if (i + 1 == page) {
+        raw += `<li class="page-item active"><span class="page-link">${i + 1}</span></li>`;
+      }
+      else {
+        raw += `<li class="page-item"><a class="page-link" href="/products/search?inputBook={{book}}&cate={{cate}}&filter={{filter}}&page=${i + 1}">${i + 1}</a></li>`;
+      }
+    }
+    tmp = page;
+    if (page == total) tmp = total - 1;
+    raw += `<li class="page-item">
+        <a class="page-link" href="/products/search?inputBook={{book}}&filter={{filter}}&&cate={{cate}}&page=${tmp + 1}">Next</a>
+      </li>`
+    $('.pagination').html(raw);
+  })
+
+</script>

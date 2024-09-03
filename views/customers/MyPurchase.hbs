@@ -1,0 +1,264 @@
+<div id="content">
+    <div class="row">
+        <div class="col-2 ps-0 pe-0">
+        <div class="account-side-bar">
+            <ul>
+                <li class="mb-1">
+                    <a href="/account/profile" style="color: #fff;font-size: 18px;">
+                        <i class="fas fa-user-circle" style="width: 20px;height: 20px;"></i>
+                        <span style="padding: 0 1em; text-align: justify; font-weight: 900;">MY ACCOUNT</span>
+                    </a>
+                </li>
+                <li class="mb-1">
+                    <a href="/mypurchase" style="color: #fff;font-size: 18px;">
+                        <i class="fas fa-cart-plus" style="width: 20px;height: 20px;"></i>
+                        <span style="padding: 0 1em; text-align: justify;">MY PURCHASE</span>
+                    </a>
+                </li>
+                <li class="mb-1">
+                    <a href="/account/password" style="color: #fff;font-size: 18px;">
+                        <i class="fas fa-unlock-alt" style="width: 20px;height: 20px;"></i>
+                        <span style="padding: 0 1em; text-align: justify;">MY PASSWORD</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+        <div class="col-10 d-flex p-0" style="flex-direction: column; position: relative; padding-left: 0;">
+            <div class="contactUs" style="display: none;">
+                <p style="font-size: 32px; margin: 10px 20px; font-weight: 600;">CONTACT US:</p>
+                <li>
+                    <span>Store Address:</span>
+                    <a href="#">71 Tran Phu, Ward 4, District 5, HCM city</a>
+                </li>
+                <li>
+                    <span>Hotline: </span>
+                    <a href="#">+84 273737373</a>
+                </li>
+                <li>
+                    <span>Email: </span>
+                    <a href="#">xibangapdoicondiem@gmail.com</a>
+                </li>
+                <button onclick="contact()" class="rate"
+                    style="position: absolute; top: 85%; left: 50%; transform: translate(-50%, -50%);">OK</button>
+            </div>
+            {{!-- Order ID --}}
+            {{#each orders}}
+            {{#if TotalPrice}}
+            <div class="item">
+                <div class="info">
+                    <div class="id">
+                        <span class="oder">ORDER ID: </span>
+                        <span class="code">{{OrderID}}</span>
+                    </div>
+                    <div class="status">
+                        <span style="text-transform: uppercase;">{{Status}}</span>
+                    </div>
+                </div>
+
+                <div class="rateBox" style="display: none;" id={{OrderID}}>
+                <form action="/mypurchase" method="POST">
+                    <input type="hidden" name="Order" value="{{OrderID}}">
+                    <div class="row">
+                        <div class="rateStars col-6">
+                            <span style="margin-right: 20px;">Rate Us</span>
+                            <span onclick="rateStars(1, {{OrderID}})" class="fa fa-star {{OrderID}}"></span>
+                            <span onclick="rateStars(2, {{OrderID}})" class="fa fa-star {{OrderID}}"></span>
+                            <span onclick="rateStars(3, {{OrderID}})" class="fa fa-star {{OrderID}}"></span>
+                            <span onclick="rateStars(4, {{OrderID}})" class="fa fa-star {{OrderID}}"></span>
+                            <span onclick="rateStars(5, {{OrderID}})" class="fa fa-star {{OrderID}}"></span>
+                            <input id="input_star{{OrderID}}" type="hidden" name="star" value="">
+                        </div>
+                        <div class="col-4"></div>
+                        <div class="col-1">
+                            <button type="button" class="out" onclick="clickRate(1, 1)">X</button>
+                        </div>
+                    </div>
+                    <div class="feedback">
+                        <span>Leave Feedback</span>
+                        <br>
+                        <textarea name="Description" id="textBox" placeholder="Type your feedback"
+                            style="font-size: 18px;"></textarea>
+                    </div>
+                    <button type="submit" onclick="clickRate()" class="rate"
+                        style="position: absolute; top: 90%; left: 50%; transform: translate(-50%, -50%);">RATE</button>
+                </form>
+            </div>
+                {{#each proList}}
+                <div class="product">
+                    <div class="Book">
+                        <img src={{Photo}}>
+                        <div class="infoBook">
+                            <a href="/book/{{ProductID}}">
+                                <span style="font-size: 18px; text-transform: uppercase;">{{ProductName}}</span>
+                            </a>
+                            <span style="margin-top: 30px;">Category: </span>
+                            <span>{{CateName}}</span>
+                        </div>
+                    </div>
+                    <div class="quantity">
+                        <span>x{{Quantity}}</span>
+                    </div>
+                    <div style="flex-direction: column; align-items: center;">
+                        <div class="charge">
+                            <span>{{PriceOut}} VND</span>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{#if (eq Status "Delivered")}}
+                <div class="function">
+                    <div class="tonggia">
+                        <div class="total col-8" style="margin-right: 100px;">
+                            <span>Order Total:</span>
+                        </div>
+                        <div class="col-4">
+                            <span class="charge">{{TotalPrice}} VND</span>
+                        </div>
+                    </div>
+                    <div class="button">
+                        <button onclick="clickRate({{@index}}, {{OrderID}})" class="rate">RATE</button>
+                        <button onclick="contact()" class="norbutton">CONTACT US</button>
+                        <button onclick="buyagain('{{toJSON proList}}')" class="norbutton">BUY AGAIN</button>
+                    </div>
+                </div>
+                {{else}}
+                <div class="function">
+                    <div class="tonggia">
+                        <div class="total col-8" style="margin-right: 100px;">
+                            <span>Order Total:</span>
+                        </div>
+                        <div class="col-4">
+                            <span class="charge">{{TotalPrice}} VND</span>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+            </div>
+            {{/if}}
+            {{/each}}
+        </div>
+    </div>
+</div>
+<script src="./_js/mainT.js"></script>
+<script>
+    function buyagain(items){
+        const selectedItems = [];
+        const parseditems = JSON.parse(items);
+        let TrueTotal = 0;
+        parseditems.forEach(item => {
+            let ProductName = item.ProductName;
+            ProductName = ProductName.trim();
+            let Category = item.CateName;
+            let ProductID = item.ProductID;
+            let img = item.Photo;
+            let PriceOut = item.PriceOut;
+            let quantity = item.Quantity;
+            let TotalPrice = parseInt(quantity) * parseInt(PriceOut);
+            TrueTotal += TotalPrice;
+            let Instock = item.Instock; 
+            selectedItems.push({ProductName: ProductName,
+                                            Category: Category,
+                                            ProductID: ProductID,
+                                            img: img,
+                                            UnitPrice: PriceOut,
+                                            Quantity: quantity,
+                                            TotalPrice: TotalPrice,
+                                            Instock: Instock
+                                        });
+        })
+        localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+        let MerchandiseSubtotal = TrueTotal;
+        localStorage.setItem("MerchandiseSubtotal", JSON.stringify(MerchandiseSubtotal));
+        window.location.href = "/checkout";
+    }
+
+    function submitRating(event) {
+        event.preventDefault(); 
+        $.post('/mypurchase', $('#ratingForm').serialize())
+            .done(function(response) {
+                // Handle the success response
+                console.log(response);
+                // Optionally display a success message or update the page content
+            })
+            .fail(function(error) {
+                // Handle the error response
+                console.error(error);
+                // Optionally show an error message to the user
+                alert('Failed to submit rating. Please try again.');
+            });
+    }
+
+    function clickRate(element, OrderID) {
+        var x = document.getElementsByClassName("fa-star")
+        for (let i = 0; i < 5; i++) {
+            x[i].classList.remove("checkedStar")
+        }
+        var elms = document.getElementsByClassName("rateBox")
+        if(OrderID){
+            Array.from(elms).forEach((x) => {
+                console.log('1')
+                if(OrderID) {
+                    if (x.style.display === "none" && x.id === OrderID.toString()) {
+                        x.style.display = "block"
+                        x.style.marginTop = String(500 * element - 70 * element + "px")
+                    } else {
+                        x.style.display = "none"
+                    }
+                } else {
+                        x.style.display = "none"
+                }
+            })
+        } else {
+            alert("Feedback Submitted!");
+        }
+        
+    }
+
+    function rateStars(values, OrderID) {
+        console.log('you are clicking on the star')
+        var x = document.getElementsByClassName(`fa-star ${OrderID}`)
+        for (let i = 0; i < 5; i++) {
+            x[i].classList.remove("checkedStar")
+        }
+        for (let i = 0; i < values; i++) {
+            x[i].classList.add("checkedStar")
+        }
+        let input_star = document.getElementById(`input_star${OrderID}`);
+        input_star.value = values;
+        console.log(values);
+    }
+
+    function contact() {
+        var elms = document.getElementsByClassName("contactUs")
+        Array.from(elms).forEach((x) => {
+            if (x.style.display === "none") {
+                x.style.display = "block"
+            } else {
+                x.style.display = "none"
+            }
+        })
+    }
+
+    function xemchitiet(element) {
+        var elms = document.getElementsByClassName("content")
+        Array.from(elms).forEach((x) => {
+            x.style.display = "none"
+        })
+        var elms = document.getElementsByClassName("details")
+        Array.from(elms).forEach((x) => {
+            x.style.display = "block"
+        })
+    }
+
+    function backtoorders() {
+        var elms = document.getElementsByClassName("details")
+        Array.from(elms).forEach((x) => {
+            x.style.display = "none"
+        })
+        var elms = document.getElementsByClassName("content")
+        Array.from(elms).forEach((x) => {
+            x.style.display = "block"
+        })
+    }
+</script>
